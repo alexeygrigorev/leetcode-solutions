@@ -3,24 +3,24 @@
 
 using namespace std;
 
-LongestSubstringSolution *solution = new LongestSubstringSolution;
+LongestSubstringSolution *solution003 = new LongestSubstringSolution;
 
 TEST(LongestSubstring, Test0) {
-    int actual = solution->lengthOfLongestSubstring("abcabcbb");
+    int actual = solution003->lengthOfLongestSubstring("abcabcbb");
     EXPECT_EQ(actual, 3);
 }
 
 TEST(LongestSubstring, Test1) {
-    int actual = solution->lengthOfLongestSubstring("bbbbb");
+    int actual = solution003->lengthOfLongestSubstring("bbbbb");
     EXPECT_EQ(actual, 1);
 }
 
 TEST(LongestSubstring, Test2) {
-    int actual = solution->lengthOfLongestSubstring("pwwkew");
+    int actual = solution003->lengthOfLongestSubstring("pwwkew");
     EXPECT_EQ(actual, 3);
 }
 
 TEST(LongestSubstring, Test3) {
-    int actual = solution->lengthOfLongestSubstring("");
+    int actual = solution003->lengthOfLongestSubstring("");
     EXPECT_EQ(actual, 0);
 }
