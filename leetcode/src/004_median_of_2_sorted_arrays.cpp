@@ -1,6 +1,5 @@
 #include <string>
 #include <vector>
-#include <iostream>
 
 #include "004_median_of_2_sorted_arrays.h"
 
