@@ -10,7 +10,7 @@ using namespace std;
 
 int KthLargestSolution::findKthLargest(vector<int> &nums, int k) {
     // TODO
-    sort(nums.begin(), nums.end());
+    sort(nums.rbegin(), nums.rend());
     print(nums);
-    return nums[k];
+    return nums[k - 1];
 }

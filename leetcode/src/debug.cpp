@@ -15,3 +15,11 @@ void print(vector<int>& v) {
 
     cout << endl;
 }
+
+void print(int* v, int len) {
+    for (int i = 0; i < len; i++) {
+        cout << v[i] << " ";
+    }
+
+    cout << endl;
+}

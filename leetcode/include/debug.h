@@ -5,3 +5,5 @@
 using namespace std;
 
 void print(vector<int>& v);
+
+void print(int* v, int len);
