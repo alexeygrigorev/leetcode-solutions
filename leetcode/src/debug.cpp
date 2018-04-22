@@ -23,3 +23,9 @@ void print(int* v, int len) {
 
     cout << endl;
 }
+
+void print_no_endl(int* array, int start, int end) {
+    for (int i = start; i < end; i++) {
+        cout << array[i] << " ";
+    }
+}
