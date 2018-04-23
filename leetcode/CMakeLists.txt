@@ -11,6 +11,8 @@ file(GLOB SOURCE
     "src/215_kth_largest.cpp"
     "include/347_top_k_frequent_test.h"
     "src/347_top_k_frequent.cpp"
+    "include/053_maximum_subarray.h"
+    "src/053_maximum_subarray.cpp"
 )
 
 add_library(leetcode SHARED STATIC ${SOURCE})
