@@ -25,10 +25,27 @@ int max_sum_naive(vector<int> &nums) {
     return max_sum;
 }
 
-int max_sum_iterating(vector<int> &nums) {
-    return 0;
+int max_sum_dp(vector<int> &nums) {
+    // https://en.wikipedia.org/wiki/Maximum_subarray_problem
+    int current_max = nums[0];
+    int global_max = nums[0];
+
+    for (int i = 1; i < nums.size(); i++) {
+        int candidate = current_max + nums[i];
+        if (candidate > nums[i]) {
+            current_max = candidate;
+        } else {
+            current_max = nums[i];
+        }
+
+        if (current_max > global_max) {
+            global_max = current_max;
+        }
+    }
+
+    return global_max;
 }
 
 int MaximumSubarraySolution::maxSubArray(vector<int> &nums) {
-    return max_sum_iterating(nums);
+    return max_sum_dp(nums);
 }
