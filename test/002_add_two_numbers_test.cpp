@@ -12,7 +12,6 @@ bool lists_eq(ListNode *a, ListNode *b) {
     return a->val == b->val && lists_eq(a->next, b->next);
 }
 
-
 TEST(AddTwoNumbers, number_to_list_0) {
     ListNode* actual = number_to_list(342);
     ListNode* expected = new ListNode(2, new ListNode(4, new ListNode(3)));

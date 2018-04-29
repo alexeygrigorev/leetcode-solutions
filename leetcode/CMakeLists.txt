@@ -19,6 +19,8 @@ file(GLOB SOURCE
     "src/002_add_two_numbers.cpp"
     "include/020_valid_parentheses.h"
     "src/020_valid_parentheses.cpp"
+    "include/001_two_sum.h"
+    "src/001_two_sum.cpp"
 )
 
 add_library(leetcode SHARED STATIC ${SOURCE})
