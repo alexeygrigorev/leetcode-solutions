@@ -1,4 +1,6 @@
 #include <string>
+#include <vector>
+#include <iostream>
 #include "032_longest_valid_parentheses.h"
 
 using namespace std;
@@ -15,13 +17,8 @@ int valid_sequence_end(string s, int b) {
             balance--;
         }
 
-        int l = i - b + 1;
-//        printf("balance=%d for s[%d:%d]='%s', len=%d\n",
-//               balance, b, i+1, s.substr(b, l).c_str(), l);
         if (balance == 0) {
             best_end = i;
-//            printf("valid seq s[%d:%d]='%s', len=%d\n",
-//               b, best_end+1, s.substr(b, l).c_str(), l);
         }
         if (balance < 0) {
             return best_end;
@@ -57,6 +54,53 @@ int longest_valid_parentheses_naive(string s) {
     return max_len;
 }
 
+int longest_valid_parentheses_matching(string s) {
+    int size = s.size();
+    vector<int> end_ptr(size, -1);
+    vector<int> stack;
+
+    for (int i = 0; i < size; i++) {
+        char c = s[i];
+        // (
+
+        if (c == '(') {
+            stack.push_back(i);
+            continue;
+        }
+
+        // )
+        if (stack.size() == 0) {
+            continue;
+        }
+
+        int begin = stack.back();
+        stack.pop_back();
+
+        end_ptr[begin] = i;
+    }
+
+    int best_len = 0;
+    int i = 0;
+
+    while (i < size) {
+        int current_len = 0;
+        while (end_ptr[i] != -1 && i < size) {
+            int next = end_ptr[i];
+            int len = next - i + 1;
+            current_len = current_len + len;
+            i = next + 1;
+        }
+
+        if (current_len > best_len) {
+            best_len = current_len;
+        }
+
+        i++;
+    }
+
+    return best_len;
+}
+
 int LongestValidParenthesesSolution::longestValidParentheses(string s) {
-    return longest_valid_parentheses_naive(s);
+    return longest_valid_parentheses_matching(s);
 }

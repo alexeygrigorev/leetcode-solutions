@@ -19,3 +19,8 @@ TEST(LongestValidParentheses, Test2) {
     int actual = solution032->longestValidParentheses("))))(()(())()))(()())(");
     EXPECT_EQ(actual, 10);
 }
+
+TEST(LongestValidParentheses, Test3) {
+    int actual = solution032->longestValidParentheses(")()()()())(()()))()");
+    EXPECT_EQ(actual, 8);
+}
