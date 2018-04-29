@@ -17,6 +17,8 @@ file(GLOB SOURCE
     "src/152_maximum_product_subarray.cpp"
     "include/002_add_two_numbers.h"
     "src/002_add_two_numbers.cpp"
+    "include/020_valid_parentheses.h"
+    "src/020_valid_parentheses.cpp"
 )
 
 add_library(leetcode SHARED STATIC ${SOURCE})
