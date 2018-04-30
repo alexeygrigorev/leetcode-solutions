@@ -23,6 +23,8 @@ file(GLOB SOURCE
     "src/001_two_sum.cpp"
     "include/032_longest_valid_parentheses.h"
     "src/032_longest_valid_parentheses.cpp"
+    "include/005_longest_palindrome_substring.h"
+    "src/005_longest_palindrome_substring.cpp"
 )
 
 add_library(leetcode SHARED STATIC ${SOURCE})
