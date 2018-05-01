@@ -25,6 +25,8 @@ file(GLOB SOURCE
     "src/032_longest_valid_parentheses.cpp"
     "include/005_longest_palindrome_substring.h"
     "src/005_longest_palindrome_substring.cpp"
+    "include/006_zigzag_conversion.h"
+    "src/006_zigzag_conversion.cpp"
 )
 
 add_library(leetcode SHARED STATIC ${SOURCE})
