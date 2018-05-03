@@ -1,5 +1,4 @@
 #include <vector>
-#include <cstdio>
 #include "007_reverse_digits.h"
 
 using namespace std;
