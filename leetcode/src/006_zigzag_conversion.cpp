@@ -1,5 +1,6 @@
 #include <string>
 #include <cstring>
+#include <vector>
 #include "006_zigzag_conversion.h"
 
 using namespace std;
@@ -71,6 +72,47 @@ string zigzag_naive(string s, int num_rows) {
     return result;
 }
 
+string zigzag_improved(string s, int num_rows) {
+    if (num_rows == 1) {
+        return s;
+    }
+
+    int n = s.length();
+    vector<string> tmp(num_rows, "");
+
+    int pos = 0;
+    int row = 0;
+    int col = 0;
+
+    while (pos < n) {
+        while (row < num_rows && pos < n) {
+            tmp[row] += s[pos];
+            row++;
+            pos++;
+        }
+
+        col++;
+        row--;
+        row--;
+
+        while (row > 0 && pos < n) {
+            tmp[row] += s[pos];
+            row--;
+            col++;
+            pos++;
+        }
+    }
+
+
+    string result;
+
+    for (int i = 0; i < num_rows; i++) {
+        result = result + tmp[i];
+    }
+
+    return result;
+}
+
 string ZigZagConversionSolution::convert(string s, int numRows) {
-    return zigzag_naive(s, numRows);
+    return zigzag_improved(s, numRows);
 }
