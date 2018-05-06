@@ -63,4 +63,3 @@ TEST(SearchRotatedSortedArray, Test4) {
         }
     }
 }
-
