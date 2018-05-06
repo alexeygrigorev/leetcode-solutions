@@ -81,7 +81,7 @@ int pivoted_search(vector<int> nums, int target) {
     }
 
     if (target >= smallest && target <= last) {
-        return bin_search(nums, target, ipiv + 1, nums.size());
+        return bin_search(nums, target, ipiv, nums.size());
     }
 
     return -1;
