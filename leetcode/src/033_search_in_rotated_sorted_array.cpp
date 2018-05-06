@@ -1,4 +1,5 @@
 #include <vector>
+#include <cstdio>
 #include "033_search_in_rotated_sorted_array.h"
 
 using namespace std;
@@ -31,91 +32,64 @@ int bin_search(vector<int> &nums, int t, int start, int end) {
     }
 }
 
-int pivoted_bin_search(vector<int> &nums, int t, int start, int end) {
+int find_pivot(vector<int> nums, int start, int end) {
     int m = start + (end - start) / 2;
     int mid = nums[m];
-    if (mid == t) {
-        return m;
-    }
     int before = nums[m - 1];
-    if (before == t) {
-        return m - 1;
-    }
     int after = nums[m + 1];
-    if (after == t) {
-        return m + 1;
-    }
-
-    int first = nums[start];
-    if (first == t) {
-        return start;
-    }
-    int last = nums[end - 1];
-    if (last == t) {
-        return end - 1;
-    }
-
-    if (before < mid && mid < after) {
-        if (mid > first) {
-            // start..m is already sorted, pivot is not there
-            if (t > first && t < mid) {
-                return bin_search(nums, t, start, m);
-            } else {
-                return pivoted_bin_search(nums, t, m + 1, end);
-            }
-        }
-        if (mid < last) {
-            // m..end is already sorted
-            if (t > mid && t < last) {
-                return bin_search(nums, t, m + 1, end);
-            } else {
-                return pivoted_bin_search(nums, t, start, m);
-            }
-        }
-
-        // hm?
-    }
 
     if (mid > before && mid > after) {
         // m is the pivot (the largest)
-        if (t > mid) {
-            return -1;
-        }
-        if (t < after) {
-            return -1;
-        }
-
-        if (t > first) {
-            return bin_search(nums, t, start, m);
-        } else {
-            return bin_search(nums, t, m + 1, end);
-        }
+        return m;
     }
 
     if (mid < before && mid < after) {
         // m is the smallest, m - 1 is the pivot
-        if (t > before) {
-            return -1;
-        }
-        if (t < mid) {
-            return -1;
-        }
-        if (t > first) {
-            return bin_search(nums, t, start, m - 1);
-        } else {
-            return bin_search(nums, t, m, end);
-        }
+        return m - 1;
     }
 
-    throw exception();
+    if (mid > nums.front()) {
+        // left part already sorted
+        // so pivot is in the right part
+        return find_pivot(nums, m + 1, end);
+    }
+
+    if (mid < nums.back()) {
+        // right part is already sorted
+        // so pivot is in the left part
+        return find_pivot(nums, start, m);
+    }
+
+    printf("cant find pivot\n");
+    throw exception(); // how did this happen?
+}
+
+int pivoted_search(vector<int> nums, int target) {
+    int first = nums.front();
+    int last = nums.back();
+
+    if (first < last) {
+        return bin_search(nums, target, 0, nums.size());
+    }
+
+    int ipiv = find_pivot(nums, 0, nums.size());
+    int largest = nums[ipiv];
+    int smallest = nums[ipiv + 1];
+
+    if (target >= first && target <= largest) {
+        return bin_search(nums, target, 0, ipiv + 1);
+    }
+
+    if (target >= smallest && target <= last) {
+        return bin_search(nums, target, ipiv + 1, nums.size());
+    }
+
+    return -1;
 }
 
 int SearchRotatedSortedArraySolution::search(vector<int> &nums, int target) {
     if (nums.size() <= 5) {
         return find_sequential(nums, target);
     }
-    if (nums.front() < nums.back()) {
-        return bin_search(nums, target, 0, nums.size());
-    }
-    return pivoted_bin_search(nums, target, 0, nums.size());
+    return pivoted_search(nums, target);
 }
