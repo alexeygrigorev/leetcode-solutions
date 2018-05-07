@@ -54,7 +54,8 @@ TEST(SearchRotatedSortedArray2, Test4) {
 }
 
 TEST(SearchRotatedSortedArray2, Test5) {
-    vector<int> nums = { 10, 10, 10, 20, 20, 30, 40, 40, 40, 50, 50, 50, 60, 70, 70, 70, 0, 0 };
+    vector<int> nums = { 10, 10, 10, 20, 20, 30, 40, 40, 40, 50, 50, 50, 60,
+                         70, 70, 70, 0, 0 };
     bool expected = true;
     bool actual = solution081->search(nums, 10);
     EXPECT_EQ(actual, expected);
@@ -81,5 +82,40 @@ TEST(SearchRotatedSortedArray2, Test8) {
                          50, 50, 60, 70};
     bool expected = true;
     bool actual = solution081->search(nums, 0);
+    EXPECT_EQ(actual, expected);
+}
+
+TEST(SearchRotatedSortedArray2, Test9) {
+    vector<int> nums = { 1, 3, 3, 0, 0, 0 };
+    bool expected = false;
+    bool actual = solution081->search(nums, -1);
+    EXPECT_EQ(actual, expected);
+}
+
+TEST(SearchRotatedSortedArray2, Test10) {
+    vector<int> nums = { 3, 0, 0, 1, 1, 1 };
+    bool expected = true;
+    bool actual = solution081->search(nums, 0);
+    EXPECT_EQ(actual, expected);
+}
+
+TEST(SearchRotatedSortedArray2, Test11) {
+    vector<int> nums = { 1,2,2,2,0,1,1 };
+    bool expected = true;
+    bool actual = solution081->search(nums, 0);
+    EXPECT_EQ(actual, expected);
+}
+
+TEST(SearchRotatedSortedArray2, Test12) {
+    vector<int> nums = { 2,2,2,2,2,2,2 };
+    bool expected = true;
+    bool actual = solution081->search(nums, 2);
+    EXPECT_EQ(actual, expected);
+}
+
+TEST(SearchRotatedSortedArray2, Test13) {
+    vector<int> nums = { 2,2,2,2,2,2,2 };
+    bool expected = false;
+    bool actual = solution081->search(nums, 1);
     EXPECT_EQ(actual, expected);
 }
