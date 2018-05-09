@@ -8,7 +8,5 @@ public:
 
 private:
     bool find_sequential(vector<int> &nums, int target);
-    bool bin_search(vector<int> &nums, int t, int start, int end);
-    int find_pivot(vector<int> nums, int start, int end);
-    bool pivoted_search(vector<int> nums, int target);
+    bool rotated_search(vector<int> nums, int target, int start, int end);
 };
