@@ -87,9 +87,47 @@ int pivoted_search(vector<int> nums, int target) {
     return -1;
 }
 
+int rotated_search(vector<int> nums, int target, int start, int end) {
+    if (start > end) {
+        return -1;
+    }
+
+    int m = start + (end - start) / 2;
+    int left = nums[start];
+    int mid = nums[m];
+    int right = nums[end];
+
+    if (mid == target) {
+        return m;
+    }
+
+    // usual binary search cases
+    if (left <= target && target < mid) {
+        // go to the left part
+        return rotated_search(nums, target, start, m - 1);
+    }
+    if (mid < target && target <= right) {
+        // go to the right part
+        return rotated_search(nums, target, m + 1, end);
+    }
+
+    // pivot is on the right and the target must be there
+    if (mid > right) {
+        return rotated_search(nums, target, m + 1, end);
+    }
+
+    // pivot is on the left, and the target must be there
+    if (mid < left) {
+        return rotated_search(nums, target, start, m - 1);
+    }
+
+    return -1;
+}
+
+
 int SearchRotatedSortedArraySolution::search(vector<int> &nums, int target) {
     if (nums.size() <= 5) {
         return find_sequential(nums, target);
     }
-    return pivoted_search(nums, target);
+    return rotated_search(nums, target, 0, nums.size() - 1);
 }
