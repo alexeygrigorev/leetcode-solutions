@@ -32,7 +32,7 @@ int bin_search(vector<int> &nums, int t, int start, int end) {
     }
 }
 
-int find_pivot(vector<int> nums, int start, int end) {
+int find_pivot(vector<int> &nums, int start, int end) {
     int m = start + (end - start) / 2;
     int mid = nums[m];
     int before = nums[m - 1];
@@ -64,7 +64,7 @@ int find_pivot(vector<int> nums, int start, int end) {
     throw exception(); // how did this happen?
 }
 
-int pivoted_search(vector<int> nums, int target) {
+int pivoted_search(vector<int> &nums, int target) {
     int first = nums.front();
     int last = nums.back();
 
@@ -87,7 +87,7 @@ int pivoted_search(vector<int> nums, int target) {
     return -1;
 }
 
-int rotated_search(vector<int> nums, int target, int start, int end) {
+int rotated_search(vector<int> &nums, int target, int start, int end) {
     if (start > end) {
         return -1;
     }

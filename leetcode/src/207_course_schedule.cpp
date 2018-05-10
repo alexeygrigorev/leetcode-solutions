@@ -1,5 +1,4 @@
 #include <vector>
-#include <cstdio>
 #include "207_course_schedule.h"
 
 #define NOT_VISITED 0
@@ -8,7 +7,7 @@
 
 using namespace std;
 
-bool dfs(vector<vector<int>>& graph, int n, vector<int>& visited) {
+bool dfs(vector<vector<int>> &graph, int n, vector<int> &visited) {
     if (visited[n] == PROCESSING) {
         return false;
     }
@@ -41,8 +40,7 @@ bool dfs_loop(vector<vector<int>> graph, vector<int> visited) {
 }
 
 
-
-bool CourseScheduleSolution::canFinish(int numCourses, vector<pair<int, int>>& prerequisites) {
+bool CourseScheduleSolution::canFinish(int numCourses, vector<pair<int, int>> &prerequisites) {
     vector<vector<int>> graph(numCourses);
 
     for (int i = 0; i < prerequisites.size(); i++) {

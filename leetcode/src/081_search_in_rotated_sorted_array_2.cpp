@@ -15,7 +15,7 @@ bool SearchRotatedSortedArray2Solution::find_sequential(vector<int> &nums, int t
     return false;
 }
 
-bool SearchRotatedSortedArray2Solution::rotated_search(vector<int> nums, int target, int start, int end) {
+bool SearchRotatedSortedArray2Solution::rotated_search(vector<int> &nums, int target, int start, int end) {
     while (nums[start] == nums[end] && end >= start) {
         end--;
     }
