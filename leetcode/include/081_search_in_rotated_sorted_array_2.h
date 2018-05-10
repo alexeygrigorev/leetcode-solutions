@@ -8,5 +8,5 @@ public:
 
 private:
     bool find_sequential(vector<int> &nums, int target);
-    bool rotated_search(vector<int> nums, int target, int start, int end);
+    bool rotated_search(vector<int> &nums, int target, int start, int end);
 };

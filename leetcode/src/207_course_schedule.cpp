@@ -1,4 +1,5 @@
 #include <vector>
+#include <cstdio>
 #include "207_course_schedule.h"
 
 #define NOT_VISITED 0
@@ -26,10 +27,47 @@ bool dfs(vector<vector<int>> &graph, int n, vector<int> &visited) {
     return true;
 }
 
+struct visit {
+    int node;
+    int cnt;
+    visit(int node, int cnt) : node(node), cnt(cnt) {}
+};
+
+bool dfs_stack(vector<vector<int>> &graph, int start, vector<int> &visited) {
+    vector<visit> stack;
+    stack.push_back(visit(start, 0));
+
+    while (!stack.empty()) {
+        visit &v = stack.back();
+        stack.pop_back();
+        int n = v.node;
+
+        if (v.cnt == 0 && visited[n] == PROCESSING) {
+            return false;
+        }
+
+        if (v.cnt > 0) {
+            visited[n] = PROCESSED;
+            continue;
+        }
+
+        visited[n] = PROCESSING;
+        stack.push_back(visit(n, 1));
+
+        for (int o : graph[n]) {
+            if (visited[o] != PROCESSED) {
+                stack.push_back(visit(o, 0));
+            }
+        }
+    }
+
+    return true;
+}
+
 bool dfs_loop(vector<vector<int>> graph, vector<int> visited) {
     for (int i = 0; i < graph.size(); i++) {
         if (visited[i] == NOT_VISITED) {
-            bool res = dfs(graph, i, visited);
+            bool res = dfs_stack(graph, i, visited);
             if (!res) {
                 return false;
             }
