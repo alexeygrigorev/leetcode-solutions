@@ -1,5 +1,4 @@
 #include <vector>
-#include <cstdio>
 #include "207_course_schedule.h"
 
 #define NOT_VISITED 0
