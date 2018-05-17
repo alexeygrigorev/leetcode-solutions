@@ -18,6 +18,11 @@ private:
     bool is_min;
     vector<int> data;
     int parent(int i);
+    bool has_parent(int i);
     int left(int i);
+    bool has_left(int i);
     int right(int i);
+    bool has_right(int i);
+
+    bool compare(int i1, int i2);
 };
