@@ -9,6 +9,45 @@ int Heap::peek() {
 
 int Heap::pop() {
     int result = peek();
+    data[0] = data.back();
+    data.pop_back();
+
+    int p = 0;
+
+    while (true) {
+        bool with_left = has_left(p);
+        bool with_right = has_right(p);
+        if (!with_left && !with_right) {
+            break;
+        }
+
+        int l = left(p);
+        int r = right(p);
+
+        if (with_left && !with_right) {
+            if (compare(p, l)) {
+                int tmp = data[l];
+                data[l] = data[p];
+                data[p] = tmp;
+            }
+            break;
+        }
+
+        if (compare(p, l) || compare(p, r)) {
+            if (compare(l, r)) {
+                int tmp = data[l];
+                data[l] = data[p];
+                data[p] = tmp;
+                p = l;
+            } else {
+                int tmp = data[l];
+                data[l] = data[p];
+                data[p] = tmp;
+                p = r;
+            }
+        }
+    }
+
     return result;
 }
 
