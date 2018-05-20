@@ -13,6 +13,7 @@ void print(vector<int>& v) {
         cout << v[i] << " ";
     }
 
+    cout << ";";
     cout << endl;
 }
 

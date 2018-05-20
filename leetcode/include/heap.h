@@ -24,5 +24,12 @@ private:
     int right(int i);
     bool has_right(int i);
 
+    void bubble_up(int i);
+    void bubble_down(int p);
+
+    void swap(int i, int j);
+
     bool compare(int i1, int i2);
+
+    void assert_heap_property();
 };
