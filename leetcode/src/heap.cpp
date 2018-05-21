@@ -140,3 +140,11 @@ void Heap::swap(int i, int j) {
     data[i] = data[j];
     data[j] = tmp;
 }
+
+void Heap::print_content() {
+    print(data);
+}
+
+int Heap::size() {
+    return data.size();
+}

@@ -12,6 +12,9 @@ public:
     static Heap* max_heap();
     ~Heap();
 
+    int size();
+    void print_content();
+
 private:
     Heap(bool is_min);
 
