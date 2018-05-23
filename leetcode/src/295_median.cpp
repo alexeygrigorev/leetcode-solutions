@@ -4,8 +4,6 @@
 using namespace std;
 
 void MedianFinderSolution::addNum(int num) {
-    printf("insert %d\n", num);
-
     if (left_max_heap->size() == 0) {
         left_max_heap->push(num);
         rebalance();
@@ -28,10 +26,8 @@ double MedianFinderSolution::findMedian() {
     int size = size_left + size_right;
 
     if (size % 2 == 0) {
-        printf("median is (%d + %d) / 2\n", left_max_heap->peek(), right_min_heap->peek());
         return 0.5 * (left_max_heap->peek() + right_min_heap->peek());
     } else {
-        printf("median is %d\n", left_max_heap->peek());
         return left_max_heap->peek();
     }
 }
@@ -42,12 +38,27 @@ void MedianFinderSolution::rebalance() {
 
     int size_left = left_max_heap->size();
     int size_right = right_min_heap->size();
-    int size = size_left + size_right;
 
-    printf("heaps :\n");
-    left_max_heap->print_content();
-    right_min_heap->print_content();
+    while (size_right > 0 && left_max_heap->peek() > right_min_heap->peek()) {
+        int from_left = left_max_heap->pop();
+        right_min_heap->push(from_left);
+        size_left--;
+        size_right++;
+    }
 
+    while (size_left > size_right) {
+        int from_left = left_max_heap->pop();
+        right_min_heap->push(from_left);
+        size_left--;
+        size_right++;
+    }
+
+    while (size_left < size_right) {
+        int from_right = right_min_heap->pop();
+        left_max_heap->push(from_right);
+        size_left++;
+        size_right--;
+    }
 }
 
 MedianFinderSolution::MedianFinderSolution() {
