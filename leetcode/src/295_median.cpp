@@ -4,64 +4,31 @@
 using namespace std;
 
 void MedianFinderSolution::addNum(int num) {
-    if (left_max_heap->size() == 0) {
-        left_max_heap->push(num);
-        rebalance();
-        return;
-    }
+    right_min_heap.push(num);
 
-    int m = left_max_heap->peek();
-    if (num <= m) {
-        left_max_heap->push(num);
-    } else {
-        right_min_heap->push(num);
-    }
+    int min_from_right = right_min_heap.top();
+    right_min_heap.pop();
+    left_max_heap.push(min_from_right);
 
-    rebalance();
+    if (left_max_heap.size() > right_min_heap.size()) {
+        int max_from_left = left_max_heap.top();
+        left_max_heap.pop();
+        right_min_heap.push(max_from_left);
+    }
 }
 
 double MedianFinderSolution::findMedian() {
-    int size_left = left_max_heap->size();
-    int size_right = right_min_heap->size();
-    int size = size_left + size_right;
+    int size_left = left_max_heap.size();
+    int size_right = right_min_heap.size();
 
-    if (size % 2 == 0) {
-        return 0.5 * (left_max_heap->peek() + right_min_heap->peek());
-    } else {
-        return left_max_heap->peek();
-    }
-}
-
-void MedianFinderSolution::rebalance() {
-    // should be either equal size
-    // or the right should contain one more element
-
-    int size_left = left_max_heap->size();
-    int size_right = right_min_heap->size();
-
-    while (size_right > 0 && left_max_heap->peek() > right_min_heap->peek()) {
-        int from_left = left_max_heap->pop();
-        right_min_heap->push(from_left);
-        size_left--;
-        size_right++;
+    if (size_left < size_right) {
+        return right_min_heap.top();
     }
 
-    while (size_left > size_right) {
-        int from_left = left_max_heap->pop();
-        right_min_heap->push(from_left);
-        size_left--;
-        size_right++;
-    }
-
-    while (size_left < size_right) {
-        int from_right = right_min_heap->pop();
-        left_max_heap->push(from_right);
-        size_left++;
-        size_right--;
-    }
+    int l = left_max_heap.top();
+    int r = right_min_heap.top();
+    return l * 0.5 + r * 0.5;
 }
 
 MedianFinderSolution::MedianFinderSolution() {
-    this->left_max_heap = Heap::max_heap();
-    this->right_min_heap = Heap::min_heap();
 }

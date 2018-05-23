@@ -1,8 +1,8 @@
 #include <string>
 #include <vector>
 #include <algorithm>
+#include <queue>
 #include "debug.h"
-#include "heap.h"
 
 using namespace std;
 
@@ -13,9 +13,8 @@ public:
     double findMedian();
 
 private:
-    Heap* left_max_heap;
-    Heap* right_min_heap;
-    void rebalance();
+    priority_queue<int, vector<int>, greater<int>> left_max_heap;
+    priority_queue<int, vector<int>, less<int>> right_min_heap;
 };
 
 /**
