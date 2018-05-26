@@ -49,10 +49,6 @@ void LRUCache::put(int key, int value) {
     LRUCacheNode *node = this->cache[key];
     if (node != nullptr) {
         node->value = value;
-        if (node == this->front) {
-            return;
-        }
-
         move_node_to_front(node);
         return;
     }
@@ -120,9 +116,10 @@ void LRUCache::evict_back() {
         this->cache.erase(back_key);
     }
 
-    delete this->back;
+    LRUCacheNode *old_back = this->back;
+    this->back = old_back->prev;
+    delete old_back;
 
-    this->back = this->back->prev;
     if (this->back != nullptr) {
         this->back->next = nullptr;
     }
