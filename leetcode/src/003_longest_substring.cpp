@@ -44,7 +44,7 @@ int lengthOfLongestSubstring_linear(string s) {
      *
      * We keep the following variables:
      * - substring_start: start of the current substring
-     * - seen_pos: map of each char to the index it was seen previously (-1 at start)
+     * - seen_pos: nodes of each char to the index it was seen previously (-1 at start)
      *
      * The current longest substring starts from the same position as previously
      * except when we already saw this char. Then the starting position
