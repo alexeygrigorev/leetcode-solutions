@@ -1,26 +1,13 @@
+#include <cstring>
 #include "211_word_dictionary.h"
 
-WordDictionaryNode* new_tree_node() {
-    WordDictionaryNode *node = new WordDictionaryNode();
-    for (int i = 0; i < 128; i++) {
-        node->next.push_back(nullptr);
-    }
-    return node;
+WordDictionaryNode::WordDictionaryNode() {
+    this->key = false;
+    memset(this->next, 0, 26 * sizeof(WordDictionaryNode *));
 }
 
 WordDictionary::WordDictionary() {
-    this->root = new_tree_node();
-}
-
-void add_word(WordDictionaryNode *node, char head, string tail) {
-    if (node->next[head] == nullptr) {
-        node->next[head] = new_tree_node();
-    }
-
-    WordDictionaryNode *next = node->next[head];
-    if (!tail.empty()) {
-        add_word(next, tail[0], tail.substr(1));
-    }
+    this->root = new WordDictionaryNode();
 }
 
 void WordDictionary::addWord(string word) {
@@ -29,34 +16,22 @@ void WordDictionary::addWord(string word) {
     }
 
     char head = word[0];
-    string tail = word.substr(1) + "!"; // ! is end of word
-    add_word(this->root, head, tail);
+    string tail = word.substr(1);
+    add_word_recursive(this->root, head, tail);
 }
 
-bool search_recursive(WordDictionaryNode *node, char head, string tail) {
-    if (head != '.') {
-        if (node->next[head] == nullptr) {
-            return false;
-        }
-        if (tail.empty()) {
-            return true;
-        }
-
-        return search_recursive(node->next[head], tail[0], tail.substr(1));
+void WordDictionary::add_word_recursive(WordDictionaryNode *node, char head, string tail) {
+    char idx = head - 'a';
+    if (node->next[idx] == nullptr) {
+        node->next[idx] = new WordDictionaryNode();
     }
 
-    for (char c = 'a'; c <= 'z'; c++) {
-        WordDictionaryNode *next = node->next[c];
-        if (next == nullptr) {
-            continue;
-        }
-
-        if (search_recursive(node, c, tail)) {
-            return true;
-        }
+    WordDictionaryNode *next = node->next[idx];
+    if (tail.empty()) {
+        next->key = true;
+    } else {
+        add_word_recursive(next, tail[0], tail.substr(1));
     }
-
-    return false;
 }
 
 bool WordDictionary::search(string word) {
@@ -65,5 +40,28 @@ bool WordDictionary::search(string word) {
     }
 
     WordDictionaryNode *node = this->root;
-    return search_recursive(node, word[0], word.substr(1) + "!");
+    return search_recursive(node, word[0], word.substr(1));
+}
+
+bool WordDictionary::search_recursive(WordDictionaryNode *node, char head, string tail) {
+    char idx = head - 'a';
+    if (head != '.') {
+        WordDictionaryNode *next = node->next[idx];
+        if (next == nullptr) {
+            return false;
+        }
+        if (tail.empty()) {
+            return next->key;
+        }
+
+        return search_recursive(next, tail[0], tail.substr(1));
+    }
+
+    for (char c = 'a'; c <= 'z'; c++) {
+        if (search_recursive(node, c, tail)) {
+            return true;
+        }
+    }
+
+    return false;
 }

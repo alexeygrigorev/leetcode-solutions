@@ -1,10 +1,11 @@
 #include <string>
-#include <vector>
 
 using namespace std;
 
 struct WordDictionaryNode {
-    vector<WordDictionaryNode*> next;
+    bool key;
+    WordDictionaryNode* next[26];
+    WordDictionaryNode();
 };
 
 class WordDictionary {
@@ -15,4 +16,6 @@ public:
 
 private:
     WordDictionaryNode *root;
+    void add_word_recursive(WordDictionaryNode *node, char head, string tail);
+    bool search_recursive(WordDictionaryNode *node, char head, string tail);
 };
