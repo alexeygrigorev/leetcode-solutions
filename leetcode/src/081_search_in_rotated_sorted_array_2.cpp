@@ -40,20 +40,20 @@ bool SearchRotatedSortedArray2Solution::rotated_search(vector<int> &nums, int ta
 
     // usual binary search cases
     if (left <= target && target < mid) {
-        // go to the left part
+        // go to the left_max_tree part
         return rotated_search(nums, target, start, m - 1);
     }
     if (mid < target && target <= right) {
-        // go to the right part
+        // go to the right_min_tree part
         return rotated_search(nums, target, m + 1, end);
     }
 
-    // pivot is on the right and the target must be there
+    // pivot is on the right_min_tree and the target must be there
     if (mid > right) {
         return rotated_search(nums, target, m + 1, end);
     }
 
-    // pivot is on the left, and the target must be there
+    // pivot is on the left_max_tree, and the target must be there
     if (mid < left) {
         return rotated_search(nums, target, start, m - 1);
     }

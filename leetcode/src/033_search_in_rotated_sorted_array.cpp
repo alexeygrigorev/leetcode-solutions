@@ -49,14 +49,14 @@ int find_pivot(vector<int> &nums, int start, int end) {
     }
 
     if (mid > nums.front()) {
-        // left part already sorted
-        // so pivot is in the right part
+        // left_max_tree part already sorted
+        // so pivot is in the right_min_tree part
         return find_pivot(nums, m + 1, end);
     }
 
     if (mid < nums.back()) {
-        // right part is already sorted
-        // so pivot is in the left part
+        // right_min_tree part is already sorted
+        // so pivot is in the left_max_tree part
         return find_pivot(nums, start, m);
     }
 
@@ -103,20 +103,20 @@ int rotated_search(vector<int> &nums, int target, int start, int end) {
 
     // usual binary search cases
     if (left <= target && target < mid) {
-        // go to the left part
+        // go to the left_max_tree part
         return rotated_search(nums, target, start, m - 1);
     }
     if (mid < target && target <= right) {
-        // go to the right part
+        // go to the right_min_tree part
         return rotated_search(nums, target, m + 1, end);
     }
 
-    // pivot is on the right and the target must be there
+    // pivot is on the right_min_tree and the target must be there
     if (mid > right) {
         return rotated_search(nums, target, m + 1, end);
     }
 
-    // pivot is on the left, and the target must be there
+    // pivot is on the left_max_tree, and the target must be there
     if (mid < left) {
         return rotated_search(nums, target, start, m - 1);
     }

@@ -110,7 +110,7 @@ void Heap::bubble_down(int p) {
     }
 
     if (!has_right(p)) {
-        // here we compare it with only left child
+        // here we compare it with only left_max_tree child
         int l = left(p);
         if (compare(l, p)) {
             swap(l, p);
