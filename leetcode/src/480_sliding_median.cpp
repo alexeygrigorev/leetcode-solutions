@@ -1,12 +1,73 @@
-#include <vector>
-#include <cstdio>
 #include "480_sliding_median.h"
 
 using namespace std;
 
+IntMultiset::IntMultiset() {
+    _size = 0;
+}
+
+void IntMultiset::add(int el) {
+    internal_map[el]++;
+    _size++;
+}
+
+int IntMultiset::min() {
+    pair<const int, int> &pair = *internal_map.begin();
+    return pair.first;
+}
+
+int IntMultiset::pop_min() {
+    pair<const int, int> &pair = *internal_map.begin();
+    decrement(pair);
+    return pair.first;
+}
+
+bool IntMultiset::remove(int el) {
+    const map<int, int>::iterator &it = internal_map.find(el);
+    if (it == internal_map.end()) {
+        return false;
+    }
+
+    pair<const int, int> &p = *it;
+    decrement(p);
+    return true;
+}
+
+void IntMultiset::decrement(pair<const int, int> &pair) {
+    int key = pair.first;
+    int cnt = pair.second;
+
+    if (cnt == 1) {
+        internal_map.erase(key);
+    } else {
+        internal_map[key]--;
+    }
+
+    _size--;
+}
+
+int IntMultiset::max() {
+    pair<const int, int> &pair = *internal_map.rbegin();
+    return pair.first;
+}
+
+int IntMultiset::pop_max() {
+    pair<const int, int> &pair = *internal_map.rbegin();
+    decrement(pair);
+    return pair.first;
+}
+
+int IntMultiset::size() {
+    return _size;
+}
+
 vector<double> SlidingMedianSolution::medianSlidingWindow(vector<int> &nums, int k) {
     if (k == 1) {
-        // TODO
+        vector<double> result;
+        for (int i = 0; i < nums.size(); i++) {
+            result.push_back((double) nums[i]);
+        }
+        return result;
     }
 
     SlidingMedianFinder *solution = new SlidingMedianFinder(nums, k);
@@ -15,7 +76,6 @@ vector<double> SlidingMedianSolution::medianSlidingWindow(vector<int> &nums, int
     return result;
 }
 
-
 SlidingMedianFinder::SlidingMedianFinder(vector<int> &nums, int k) : nums(nums), k(k) {
 }
 
@@ -23,65 +83,63 @@ vector<double> SlidingMedianFinder::run() {
     vector<double> result;
 
     for (int i = 0; i < k; i++) {
-        printf("%d\n", nums[i]);
-        right_min_tree.insert(nums[i]);
+        left_max_tree.add(nums[i]);
     }
 
-    int left_size = 0;
-    int right_size = k;
-
-    while (left_size < right_size) {
-        int from_right = *right_min_tree.begin();
-        right_min_tree.erase(from_right);
-        left_max_tree.insert(from_right);
-        left_size++;
-        right_size--;
+    while (left_max_tree.size() > right_min_tree.size()) {
+        int from_left = left_max_tree.pop_max();
+        right_min_tree.add(from_left);
     }
 
     double median = current_median();
-    printf("%f\n", median);
     result.push_back(median);
 
     for (int i = k; i < nums.size(); i++) {
         int prev = nums[i - k];
         int cur = nums[i];
-        printf("removing %d, adding %d\n", prev, cur);
 
-        int left_removed = left_max_tree.erase(prev);
-        left_size = left_size - left_removed;
-        int right_removed = right_min_tree.erase(prev);
-        right_size = right_size - right_removed;
-        printf("removed %d from left, %d from right\n", left_removed, right_removed);
-
-        right_min_tree.insert(cur);
-        right_size++;
-
-        printf("sizes: %d, %d\n", left_size, right_size);
-
-        while (left_size < right_size) {
-            int from_right = *right_min_tree.begin();
-            right_min_tree.erase(from_right);
-            left_max_tree.insert(from_right);
-            left_size++;
-            right_size--;
-        }
-
-        printf("sizes: %d, %d\n", left_size, right_size);
-
-        double median = current_median();
-        printf("median: %f\n", median);
+        remove_and_add(prev, cur);
+        median = current_median();
         result.push_back(median);
     }
 
     return result;
 }
 
+void SlidingMedianFinder::add_element(int el) {
+    right_min_tree.add(el);
+    int from_right = right_min_tree.pop_min();
+    left_max_tree.add(from_right);
+
+    while (left_max_tree.size() > right_min_tree.size()) {
+        int from_left = left_max_tree.pop_max();
+        right_min_tree.add(from_left);
+    }
+}
+
+
+void SlidingMedianFinder::remove_and_add(int to_remove, int to_add) {
+    if (to_remove == to_add) {
+        return;
+    }
+    remove_element(to_remove);
+    add_element(to_add);
+}
+
+void SlidingMedianFinder::remove_element(int el) {
+    if (right_min_tree.remove(el)) {
+        return;
+    }
+
+    left_max_tree.remove(el);
+}
+
 double SlidingMedianFinder::current_median() {
     if (k % 2 == 0) {
-        int l = *left_max_tree.begin();
-        int r = *right_min_tree.begin();
-        return l * 0.5 + r * 0.5;
+        int left = left_max_tree.max();
+        int right = right_min_tree.min();
+        return left * 0.5 + right * 0.5;
     } else {
-        return *left_max_tree.begin();
+        return right_min_tree.min();
     }
 }
