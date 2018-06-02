@@ -39,3 +39,38 @@ TEST(Regexp, Test4) {
     bool actual = solution010->isMatch(s, p);
     EXPECT_EQ(actual, false);
 }
+
+TEST(Regexp, Test5) {
+    string s = "aaa";
+    string p = "a*a";
+    bool actual = solution010->isMatch(s, p);
+    EXPECT_EQ(actual, true);
+}
+
+TEST(Regexp, Test6) {
+    string s = "mississippi";
+    string p = "mis*is*ip*.";
+    bool actual = solution010->isMatch(s, p);
+    EXPECT_EQ(actual, true);
+}
+
+TEST(Regexp, Test7) {
+    string s = "";
+    string p = ".";
+    bool actual = solution010->isMatch(s, p);
+    EXPECT_EQ(actual, false);
+}
+
+TEST(Regexp, Test8) {
+    string s = "a";
+    string p = "ab*";
+    bool actual = solution010->isMatch(s, p);
+    EXPECT_EQ(actual, true);
+}
+
+TEST(Regexp, Test9) {
+    string s = "bbbba";
+    string p = ".*a*a";
+    bool actual = solution010->isMatch(s, p);
+    EXPECT_EQ(actual, true);
+}
