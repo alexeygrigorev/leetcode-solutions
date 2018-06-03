@@ -74,3 +74,24 @@ TEST(Regexp, Test9) {
     bool actual = solution010->isMatch(s, p);
     EXPECT_EQ(actual, true);
 }
+
+TEST(Regexp, Test10) {
+    string s = "a";
+    string p = "a*a";
+    bool actual = solution010->isMatch(s, p);
+    EXPECT_EQ(actual, true);
+}
+
+TEST(Regexp, Test11) {
+    string s = "aaaaaaaaaaaaab";
+    string p = "a*a*a*a*a*a*a*a*a*a*c";
+    bool actual = solution010->isMatch(s, p);
+    EXPECT_EQ(actual, false);
+}
+
+TEST(Regexp, SimplifyTest1) {
+    string input = "a*a*a*a*a*a*a*a*a*a*c";
+    string expected = "a*c";
+    string actual = solution010->simplify(input);
+    EXPECT_EQ(actual, expected);
+}

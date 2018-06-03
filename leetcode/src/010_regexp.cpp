@@ -2,15 +2,15 @@
 
 using namespace std;
 
-bool RegexpSolution::isMatch(string s, string p) {
-    printf("%s ~= %s\n", s.c_str(), p.c_str());
+bool match(string s, string p) {
+//    printf("%s ~= %s\n", s.c_str(), p.c_str());
 
     int plen = p.length();
     int slen = s.length();
 
     if (slen == 0) {
-        if (plen == 2) {
-            return p[1] == '*';
+        if (plen >= 2 && p[1] == '*') {
+            return match(s, p.substr(2));
         }
         return plen == 0;
     }
@@ -19,20 +19,24 @@ bool RegexpSolution::isMatch(string s, string p) {
     char sc = s[0];
 
     if (plen > 1 && p[1] == '*') {
+//        printf(" - got a star\n");
         if (pc == '.') {
             if (plen == 2) {
                 return true;
             }
-            printf("check if need backtrack for %s ~= %s\n", s.c_str(), p.c_str());
-            bool b1 = isMatch(s.substr(1), p);
+//            printf("check if need backtrack for %s ~= %s\n", s.c_str(), p.c_str());
+//            printf(" - what about %s ~= %s?\n", s.substr(1).c_str(), p.substr(0).c_str());
+            bool b1 = match(s.substr(1), p);
             if (b1) {
                 return true;
             }
-            bool b2 = isMatch(s.substr(1), p.substr(2));
+//            printf(" - what about %s ~= %s?\n", s.substr(1).c_str(), p.substr(2).c_str());
+            bool b2 = match(s.substr(1), p.substr(2));
             if (b2) {
                 return true;
             }
-            return isMatch(s, p.substr(2));
+//            printf(" - what about %s ~= %s?\n", s.substr(0).c_str(), p.substr(2).c_str());
+            return match(s, p.substr(2));
         }
 
         int i = 0;
@@ -44,28 +48,60 @@ bool RegexpSolution::isMatch(string s, string p) {
             }
         }
 
-        bool simple_match = isMatch(s.substr(i), p.substr(2));
+//        printf(" - try simple match %s ~= %s\n", s.substr(i).c_str(), p.substr(2).c_str());
+        bool simple_match = match(s.substr(i), p.substr(2));
         if (simple_match) {
             return true;
-        } else if (plen > 2 && slen > 1) {
-            printf("check if need backtrack for %s ~= %s\n", s.c_str(), p.c_str());
-            if (pc != sc) {
-                return false;
-            }
-            printf(" - what about %s ~= %s?\n", s.substr(1).c_str(), p.substr(2).c_str());
-
-            bool b1 = isMatch(s.substr(1), p.substr(2));
-            if (b1) {
-                return b1;
-            }
-            printf(" - what about %s ~= %s?\n", s.substr(1).c_str(), p.substr(0).c_str());
-            return isMatch(s.substr(1), p.substr(0));
         }
+
+//        printf("check if need backtrack for %s ~= %s\n", s.c_str(), p.c_str());
+        if (pc != sc) {
+            return false;
+        }
+
+//        printf(" - what about %s ~= %s?\n", s.substr(1).c_str(), p.substr(2).c_str());
+        bool b1 = match(s.substr(1), p.substr(2));
+        if (b1) {
+            return b1;
+        }
+//        printf(" - what about %s ~= %s?\n", s.substr(1).c_str(), p.substr(0).c_str());
+        bool b2 = match(s.substr(1), p.substr(0));
+        if (b2) {
+            return b2;
+        }
+        return match(s.substr(0), p.substr(2));
     }
 
     if (pc == sc || pc == '.') {
-        return isMatch(s.substr(1), p.substr(1));
+//        printf(" - simple match, continue with %s ~= %s\n",
+//               s.substr(1).c_str(), p.substr(1).c_str());
+        return match(s.substr(1), p.substr(1));
     } else {
+//        printf(" - %s ~!= %s\n", s.c_str(), p.c_str());
         return false;
     }
+}
+
+bool RegexpSolution::isMatch(string s, string p) {
+    return match(s, simplify(p));
+}
+
+string RegexpSolution::simplify(string p) {
+    int plen = p.length();
+    string res;
+
+    for (int i = 0; i < plen; i++) {
+        char pch = p[i];
+        if (i < plen - 1 && p[i + 1] == '*') {
+            if (i < plen - 3 && p[i + 3] == '*') {
+                if (pch == p[i + 2]) {
+                    i++;
+                    continue;
+                }
+            }
+        }
+        res.push_back(pch);
+    }
+
+    return res;
 }
