@@ -8,7 +8,7 @@ RemoveDuplicatesSortedList2Solution::deleteDuplicates(RemoveDuplicatesSortedList
 
     if (head->val == head->next->val) {
         int value = head->val;
-        RemoveDuplicatesSortedList2Solution::ListNode *next = head->next;
+        ListNode *next = head->next;
         while (next != nullptr && next->val == value) {
             next = next->next;
         }

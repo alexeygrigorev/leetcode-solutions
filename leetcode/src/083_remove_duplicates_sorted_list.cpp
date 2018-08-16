@@ -6,8 +6,8 @@ RemoveDuplicatesSortedListSolution::deleteDuplicates(RemoveDuplicatesSortedListS
         return head;
     }
 
-    RemoveDuplicatesSortedListSolution::ListNode *prev = head;
-    RemoveDuplicatesSortedListSolution::ListNode *node = head->next;
+    ListNode *prev = head;
+    ListNode *node = head->next;
 
     while (node != nullptr) {
         int prev_value = prev->val;
