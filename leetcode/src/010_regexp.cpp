@@ -3,8 +3,6 @@
 using namespace std;
 
 bool match(string s, string p) {
-//    printf("%s ~= %s\n", s.c_str(), p.c_str());
-
     int plen = p.length();
     int slen = s.length();
 
@@ -19,23 +17,18 @@ bool match(string s, string p) {
     char sc = s[0];
 
     if (plen > 1 && p[1] == '*') {
-//        printf(" - got a star\n");
         if (pc == '.') {
             if (plen == 2) {
                 return true;
             }
-//            printf("check if need backtrack for %s ~= %s\n", s.c_str(), p.c_str());
-//            printf(" - what about %s ~= %s?\n", s.substr(1).c_str(), p.substr(0).c_str());
             bool b1 = match(s.substr(1), p);
             if (b1) {
                 return true;
             }
-//            printf(" - what about %s ~= %s?\n", s.substr(1).c_str(), p.substr(2).c_str());
             bool b2 = match(s.substr(1), p.substr(2));
             if (b2) {
                 return true;
             }
-//            printf(" - what about %s ~= %s?\n", s.substr(0).c_str(), p.substr(2).c_str());
             return match(s, p.substr(2));
         }
 
@@ -48,23 +41,19 @@ bool match(string s, string p) {
             }
         }
 
-//        printf(" - try simple match %s ~= %s\n", s.substr(i).c_str(), p.substr(2).c_str());
         bool simple_match = match(s.substr(i), p.substr(2));
         if (simple_match) {
             return true;
         }
 
-//        printf("check if need backtrack for %s ~= %s\n", s.c_str(), p.c_str());
         if (pc != sc) {
             return false;
         }
 
-//        printf(" - what about %s ~= %s?\n", s.substr(1).c_str(), p.substr(2).c_str());
         bool b1 = match(s.substr(1), p.substr(2));
         if (b1) {
             return b1;
         }
-//        printf(" - what about %s ~= %s?\n", s.substr(1).c_str(), p.substr(0).c_str());
         bool b2 = match(s.substr(1), p.substr(0));
         if (b2) {
             return b2;
@@ -73,11 +62,8 @@ bool match(string s, string p) {
     }
 
     if (pc == sc || pc == '.') {
-//        printf(" - simple match, continue with %s ~= %s\n",
-//               s.substr(1).c_str(), p.substr(1).c_str());
         return match(s.substr(1), p.substr(1));
     } else {
-//        printf(" - %s ~!= %s\n", s.c_str(), p.c_str());
         return false;
     }
 }
