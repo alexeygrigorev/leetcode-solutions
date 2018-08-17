@@ -42,6 +42,34 @@ InsertionSortListSolution::ListNode *InsertionSortListSolution::bubble(Insertion
 }
 
 InsertionSortListSolution::ListNode *
+InsertionSortListSolution::insertion_inplace(InsertionSortListSolution::ListNode *head) {
+    if (head == nullptr) {
+        return nullptr;
+    }
+
+    ListNode *node = head;
+    int tmp;
+
+    while (node != nullptr) {
+        ListNode *cur = node->next;
+
+        while (cur != nullptr) {
+            if (node->val > cur->val) {
+                tmp = node->val;
+                node->val = cur->val;
+                cur->val = tmp;
+            }
+
+            cur = cur->next;
+        }
+
+        node = node->next;
+    }
+
+    return head;
+}
+
+InsertionSortListSolution::ListNode *
 InsertionSortListSolution::insertionSortList(InsertionSortListSolution::ListNode *head) {
     return bubble(head);
 }

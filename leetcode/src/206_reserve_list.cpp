@@ -27,7 +27,7 @@ ReverseListSolution::ListNode *ReverseListSolution::reverse_iterative(ReverseLis
 
     ListNode *prev = nullptr;
     ListNode *node = head;
-    ListNode *next = node->next;
+    ListNode *next;
 
     while (node != nullptr) {
         next = node->next;
