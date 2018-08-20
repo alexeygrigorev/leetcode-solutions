@@ -1,6 +1,6 @@
 #include "147_insertion_sort_list.h"
 
-InsertionSortListSolution::ListNode *InsertionSortListSolution::find_min(InsertionSortListSolution::ListNode *head) {
+ListNode *InsertionSortListSolution::find_min(ListNode *head) {
     if (head == nullptr) {
         return nullptr;
     }
@@ -23,7 +23,7 @@ InsertionSortListSolution::ListNode *InsertionSortListSolution::find_min(Inserti
     return min_prev;
 }
 
-InsertionSortListSolution::ListNode *InsertionSortListSolution::bubble(InsertionSortListSolution::ListNode *head) {
+ListNode *InsertionSortListSolution::bubble(ListNode *head) {
     if (head == nullptr) {
         return nullptr;
     }
@@ -41,8 +41,7 @@ InsertionSortListSolution::ListNode *InsertionSortListSolution::bubble(Insertion
 
 }
 
-InsertionSortListSolution::ListNode *
-InsertionSortListSolution::insertion_inplace(InsertionSortListSolution::ListNode *head) {
+ListNode * InsertionSortListSolution::insertion_inplace(ListNode *head) {
     if (head == nullptr) {
         return nullptr;
     }
@@ -69,7 +68,6 @@ InsertionSortListSolution::insertion_inplace(InsertionSortListSolution::ListNode
     return head;
 }
 
-InsertionSortListSolution::ListNode *
-InsertionSortListSolution::insertionSortList(InsertionSortListSolution::ListNode *head) {
+ListNode * InsertionSortListSolution::insertionSortList(ListNode *head) {
     return bubble(head);
 }

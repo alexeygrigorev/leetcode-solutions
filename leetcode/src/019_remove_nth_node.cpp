@@ -4,7 +4,7 @@
 
 using namespace std;
 
-RemoveNthNodeFromEndOfListSolution::ListNode *RemoveNthNodeFromEndOfListSolution::removeNthFromEnd(ListNode *head, int n) {
+ListNode *RemoveNthNodeFromEndOfListSolution::removeNthFromEnd(ListNode *head, int n) {
     int len = 0;
     ListNode *node = head;
     while (node != nullptr) {

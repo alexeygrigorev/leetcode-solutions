@@ -1,8 +1,6 @@
 #include "160_intersection_of_two_lists.h"
 
-IntersectionOfTwoListsSolution::ListNode *
-IntersectionOfTwoListsSolution::getIntersectionNode(IntersectionOfTwoListsSolution::ListNode *headA,
-                                                    IntersectionOfTwoListsSolution::ListNode *headB) {
+ListNode * IntersectionOfTwoListsSolution::getIntersectionNode(ListNode *headA, ListNode *headB) {
     int len1 = 1;
     ListNode *last1 = headA;
     while (last1 != nullptr) {

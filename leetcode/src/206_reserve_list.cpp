@@ -1,7 +1,6 @@
 #include "206_reserve_list.h"
 
-ReverseListSolution::ListNode *
-ReverseListSolution::reverse(ReverseListSolution::ListNode *prev, ReverseListSolution::ListNode *node) {
+ListNode * ReverseListSolution::reverse(ListNode *prev, ListNode *node) {
     if (node == nullptr) {
         return node;
     }
@@ -16,11 +15,11 @@ ReverseListSolution::reverse(ReverseListSolution::ListNode *prev, ReverseListSol
     return reverse(node, next);
 }
 
-ReverseListSolution::ListNode *ReverseListSolution::reverse_recursive(ReverseListSolution::ListNode *head) {
+ListNode *ReverseListSolution::reverse_recursive(ListNode *head) {
     return reverse(nullptr, head);
 }
 
-ReverseListSolution::ListNode *ReverseListSolution::reverse_iterative(ReverseListSolution::ListNode *head) {
+ListNode *ReverseListSolution::reverse_iterative(ListNode *head) {
     if (head == nullptr) {
         return nullptr;
     }
@@ -39,6 +38,6 @@ ReverseListSolution::ListNode *ReverseListSolution::reverse_iterative(ReverseLis
     return prev;
 }
 
-ReverseListSolution::ListNode *ReverseListSolution::reverseList(ReverseListSolution::ListNode *head) {
+ListNode *ReverseListSolution::reverseList(ListNode *head) {
     return reverse_iterative(head);
 }

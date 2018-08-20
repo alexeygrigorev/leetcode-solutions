@@ -1,7 +1,6 @@
 #include "083_remove_duplicates_sorted_list.h"
 
-RemoveDuplicatesSortedListSolution::ListNode*
-RemoveDuplicatesSortedListSolution::deleteDuplicates(RemoveDuplicatesSortedListSolution::ListNode* head) {
+ListNode* RemoveDuplicatesSortedListSolution::deleteDuplicates(ListNode* head) {
     if (head == nullptr) {
         return head;
     }
