@@ -1,4 +1,4 @@
-Brief description of the solutions:
+Brief description of the solutions
 
 
 ## 3. Longest substring without repeating characters (medium)
@@ -48,6 +48,9 @@ Then select the longest one
 
 ## 10. Regular Expression Matching (hard)
 
+* [description](https://leetcode.com/problems/regular-expression-matching/)
+* [solution](https://github.com/alexeygrigorev/leetcode-solutions/blob/master/leetcode/src/010_regexp.cpp)
+
 Given:
 * a string `s`
 * a pattern `p` supporting "`.`" and "`?`"
@@ -80,14 +83,14 @@ It can be solved using recursion
         * try `match(s, p[2..])`
     * specific matcher case:
         * let `c = p[0]`
-        * let $i = 0$ and move `i` forward till `s[i] == c`
+        * let `i = 0` and move `i` forward while `s[i] == c`
             * and then try `match(s[i..], p[2..])`
         * if not successfull:
         * try `match(s[1..], p)`
         * try `match(s[1..], p[2..])`
         * try `match(s, p[2..])`
 * if `p[0] == '.'` or `s[0] == p[0]`
-    * return `match(s[1..], p[1..])
+    * return `match(s[1..], p[1..])`
 * return `false`
 
 
@@ -163,6 +166,34 @@ If `sum[i]` is negative, then no matter what we have at `arr[i+1]`, it will no h
 
 Links:
 * https://en.wikipedia.org/wiki/Maximum_subarray_problem
+
+
+## 72. Edit Distance (hard)
+
+* a DP problem
+* [description](https://leetcode.com/problems/edit-distance/description/)
+* [solution](https://github.com/alexeygrigorev/leetcode-solutions/blob/master/leetcode/src/072_edit_distance.cpp)
+
+Input:
+* string `s1` of size `n1`
+* string `s2` of size `n2`
+
+Keep
+* `distance[n1 + 1][n2 + 1]` where
+* `distance[i][j]` is the edit distance for `s1[:i+1][:j+1]`
+
+`distance[i][j]`
+* `substitution_cost`: if `s1[i+1] == s2[j+1]`
+    * then there's no cost for inserting the letter, so just take `dinstance[i-1][j-1]`
+    * else, it's `distance[i-1][j-1] + 1`
+* `delete_cost`: `distance[i-1][j] + 1`
+* `insertion_cost`: `distance[i][j-1] + 1`
+
+
+
+Links:
+* https://en.wikipedia.org/wiki/Levenshtein_distance
+
 
 
 ## 81. Search in Rotated Sorted Array II (medium)
