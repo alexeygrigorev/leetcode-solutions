@@ -1,6 +1,7 @@
 #include "048_rotate_image.h"
 
-void RotateImageSolution::rotate(vector<vector<int>> &m) {
+
+void RotateImageSolution::rotate_blocks(vector<vector<int>> &m) {
     int n = m.size();
     if (n <= 1) {
         return;
@@ -30,4 +31,41 @@ void RotateImageSolution::rotate(vector<vector<int>> &m) {
             m[i1][j1] = tmp;
         }
     }
+}
+
+void RotateImageSolution::transpose(vector<vector<int>> &m) {
+    int n = m.size();
+    for (int i = 1; i < n; i++) {
+        for (int j = 0; j < i; j++) {
+            int tmp = m[i][j];
+            m[i][j] = m[j][i];
+            m[j][i] = tmp;
+        }
+    }
+}
+
+void RotateImageSolution::reverse_rows(vector<vector<int>> &m) {
+    int n = m.size();
+    int n2 = n / 2;
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n2; j++) {
+            int k = n - 1 - j;
+            int tmp = m[i][j];
+            m[i][j] = m[i][k];
+            m[i][k] = tmp;
+        }
+    }
+}
+
+void RotateImageSolution::rotate_transpose_reverse(vector<vector<int>> &m) {
+    if (m.size() == 1) {
+        return;
+    }
+    transpose(m);
+    reverse_rows(m);
+}
+
+
+void RotateImageSolution::rotate(vector<vector<int>> &m) {
+    return rotate_transpose_reverse(m);
 }
