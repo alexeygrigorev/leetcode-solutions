@@ -1,14 +1,12 @@
 #include <string>
 #include <unordered_set>
-#include <cstring>
-#include <iostream>
 
 #include "003_longest_substring.h"
 
 using namespace std;
 
 
-int lengthOfLongestSubstring_naive(string s) {
+int lengthOfLongestSubstring_naive(string &s) {
     int len = s.length();
     if (len == 0) {
         return 0;
@@ -38,7 +36,7 @@ int lengthOfLongestSubstring_naive(string s) {
     return max;
 }
 
-int lengthOfLongestSubstring_linear(string s) {
+int lengthOfLongestSubstring_linear(string &s) {
     /*
      * Algorithm:
      *
@@ -57,8 +55,10 @@ int lengthOfLongestSubstring_linear(string s) {
         return 0;
     }
 
-    int* seen_pos = new int[128];
-    memset(seen_pos, -1, 128 * sizeof(int));
+    int seen_pos[128];
+    for (int i = 0; i < 128; i++) {
+        seen_pos[i] = -1;
+    }
 
     int largest_len = 0;
     int substring_start = 0;

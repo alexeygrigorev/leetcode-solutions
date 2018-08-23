@@ -4,7 +4,7 @@
 
 using namespace std;
 
-bool is_palindrome(string s) {
+bool is_palindrome(string &s) {
     int size = s.size();
     for (int i = 0; i < size / 2; i++) {
         if (s[i] != s[size - i - 1]) {
@@ -14,7 +14,7 @@ bool is_palindrome(string s) {
     return true;
 }
 
-string longest_palindrome_naive(string s) {
+string longest_palindrome_naive(string &s) {
     string longest = s.substr(0, 1);
     int longest_len = 1;
 
@@ -36,7 +36,7 @@ string longest_palindrome_naive(string s) {
     return longest;
 }
 
-string longest_palindrome_dp(string s) {
+string longest_palindrome_dp(string &s) {
     int longest_len = 1;
     string longest = s.substr(0, 1);
 
