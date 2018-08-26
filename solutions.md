@@ -22,11 +22,6 @@ to calculate `start[i+1]`
 That is, if `c` was seen after `start[i]`, we move `start[i+1]` right after `map[c]`
 
 
-## 4. Median of Two Sorted Arrays (hard)
-
-* [description](https://leetcode.com/problems/longest-palindromic-substring/)
-* [solution](https://github.com/alexeygrigorev/leetcode-solutions/blob/master/leetcode/src/005_longest_palindrome_substring.cpp)
-
 ## 5. Longest Palindrome Subsequence (medium)
 
 * a DP problem 
@@ -203,7 +198,7 @@ Links:
 
 ## 81. Search in Rotated Sorted Array II (medium)
 
-* [description](https://leetcode.com/problems/search-in-rotated-create_sorted_triplet-array-ii/description/)
+* [description](https://leetcode.com/problems/search-in-rotated-sorted-array-ii/description/)
 * [solution](https://github.com/alexeygrigorev/leetcode-solutions/blob/master/leetcode/src/081_search_in_rotated_sorted_array_2.cpp)
 * same as 33. Search in Rotated Sorted Array (medium), but with duplicates
 
