@@ -22,5 +22,7 @@ public:
     };
 
     vector<vector<int>> hash_count(vector<int>& nums);
+    vector<vector<int>> sort_count(vector<int>& nums);
+
     vector<vector<int>> threeSum(vector<int>& nums);
 };

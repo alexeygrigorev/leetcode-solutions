@@ -99,6 +99,42 @@ It can be solved using recursion
 TODO
 
 
+## 15. 3Sum
+
+* [description](https://leetcode.com/problems/3sum/)
+* [solution](https://github.com/alexeygrigorev/leetcode-solutions/blob/master/leetcode/src/015_three_sum.cpp)
+
+
+Solution with a hash:
+
+* count every element with a hash
+* then go through each (element, count) pair
+* if it's `0` and appears 3 or more time, output `(0, 0, 0)`
+* if it's some `a` (`a != 0`) that appears 2 or more times
+    * check if there's `c = -2*a`
+    * if yes, output `(a, a, c)`
+* if `a` appears only once
+    * check through all `b != a` and for each `b` check if there'c `c = -(a-b)`
+    * if yes, output `(a, b, c)`
+* use set to get rid of duplicates
+
+
+Solution with sorting
+
+* sort the array
+* for each element `a` in this array
+* fast-forward it if it's equals to the previous element (to avoid duplicates)
+* then do a 2-sum bi-directional pass:
+    * let `target = -a`
+    * let `b` be the element next to `a`, and `c` - the most right element
+    * if `s = a + b == target`
+        * output `(a, b, c)`
+        * to skip duplicates:
+        * move `b` right till it changes value
+        * move `c` left till it changes value
+    * if `s < target` - move `b` right
+    * if `s > target` - move `c` left
+
 
 ## 33. Search in Rotated Sorted Array (medium)
 

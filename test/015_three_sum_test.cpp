@@ -46,3 +46,15 @@ TEST(ThreeSum, Test2) {
 
     EXPECT_EQ(actual, expected);
 }
+
+TEST(ThreeSum, Test3) {
+    vector<int> nums = {-12, 0, 2, 6, 6, 10, 12, 15};
+
+    vector<vector<int>> actual = solution015->threeSum(nums);
+    sort_vector_of_vectors(actual);
+
+    vector<vector<int>> expected = {{-12,0,12}, {-12,2,10}, {-12,6,6}};
+    sort_vector_of_vectors(expected);
+
+    EXPECT_EQ(actual, expected);
+}
