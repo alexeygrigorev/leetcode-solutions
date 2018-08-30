@@ -1,4 +1,5 @@
 #include "023_merge_k_sorted_lists.h"
+#include <queue>
 
 ListNode *MergeJSortedListsSolution::merge_naive(vector<ListNode *> &lists) {
     for (int i = lists.size() - 1; i >= 0; i--) {
@@ -39,6 +40,40 @@ ListNode *MergeJSortedListsSolution::merge_naive(vector<ListNode *> &lists) {
     return head->next;
 }
 
+struct ListNodeComparer {
+    bool operator() (ListNode *left, ListNode *right) const {
+        return left->val > right->val;
+    }
+};
+
+ListNode *MergeJSortedListsSolution::merge_heap(vector<ListNode *> &lists) {
+    priority_queue<ListNode*, vector<ListNode*>, ListNodeComparer> heap;
+
+    for (int i = 0; i < lists.size(); i++) {
+        if (lists[i] != nullptr) {
+            heap.emplace(lists[i]);
+        }
+    }
+
+    ListNode *head = new ListNode(31337);
+    ListNode *node = head;
+
+    while (!heap.empty()) {
+        ListNode *best = heap.top();
+        heap.pop();
+
+        if (best->next != nullptr) {
+            heap.emplace(best->next);
+        }
+
+        best->next = nullptr;
+        node->next = best;
+        node = best;
+    }
+
+    return head->next;
+}
+
 ListNode *MergeJSortedListsSolution::mergeKLists(vector<ListNode *> &lists) {
-    return merge_naive(lists);
+    return merge_heap(lists);
 }
