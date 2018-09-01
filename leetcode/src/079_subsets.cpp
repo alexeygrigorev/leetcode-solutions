@@ -13,8 +13,8 @@ vector<vector<int>> SubsetsSolution::subset_bits(vector<int> &nums) {
             }
         }
         result.push_back(subset);
-
     }
+
     return result;
 }
 
