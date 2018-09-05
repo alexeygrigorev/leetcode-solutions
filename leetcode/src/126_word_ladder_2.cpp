@@ -1,6 +1,5 @@
 #include "126_word_ladder_2.h"
 #include <queue>
-#include <unordered_set>
 #include <algorithm>
 
 void WordLadder2Solution::add_groups(multimap &groups, string &word) {
@@ -43,7 +42,7 @@ multimap WordLadder2Solution::bfs(multimap &graph, string &start, string &end) {
     unordered_map<string, vector<string>> parents;
 
     while (!q.empty()) {
-        string from = q.front();
+        string &from = q.front();
         q.pop();
 
         if (from == end) {

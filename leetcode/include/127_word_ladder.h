@@ -11,6 +11,12 @@ class WordLadderSolution {
 public:
     void add_groups(multimap &groups, string &word);
     multimap create_graph(multimap &groups);
+
     smap bfs(multimap &graph, string &start, string &end);
-    int ladderLength(string beginWord, string endWord, vector<string>& wordList);
+    int bfs_ladder_len(string beginWord, string endWord, vector<string> &wordList);
+
+    int bidirectional_bfs(multimap &graph, string &start, string &end);
+    int bidirectional_ladder_len(string beginWord, string endWord, vector<string> &wordList);
+
+    int ladderLength(string beginWord, string endWord, vector<string> &wordList);
 };
