@@ -10,6 +10,7 @@ struct RandomListNode {
 
 class CopyListRandomPointerSolution {
 public:
+    RandomListNode *copy_iterative(RandomListNode *head);
     RandomListNode *copy(unordered_map<RandomListNode *, RandomListNode *> &copy_cache,
                          RandomListNode *node);
     RandomListNode *copyRandomList(RandomListNode *head);

@@ -1,5 +1,29 @@
 #include "128_copy_list_random_pointer.h"
 
+RandomListNode *CopyListRandomPointerSolution::copy_iterative(RandomListNode *head) {
+    unordered_map<RandomListNode *, RandomListNode *> copy_cache;
+
+    RandomListNode *node = head;
+    while (node != nullptr) {
+        RandomListNode *copy = new RandomListNode(node->label);
+        copy->next = node->next;
+        copy->random = node->random;
+        copy_cache[node] = copy;
+        node = node->next;
+    }
+
+    node = copy_cache[head];
+    while (node != nullptr) {
+        node->next = copy_cache[node->next];
+        if (node->random != nullptr) {
+            node->random = copy_cache[node->random];
+        }
+        node = node->next;
+    }
+
+    return copy_cache[head];
+}
+
 RandomListNode *CopyListRandomPointerSolution::copy(unordered_map<RandomListNode *, RandomListNode *> &copy_cache,
                                                     RandomListNode *node) {
     if (node == nullptr) {
@@ -23,3 +47,4 @@ RandomListNode *CopyListRandomPointerSolution::copyRandomList(RandomListNode *he
     unordered_map<RandomListNode *, RandomListNode *> copy_cache;
     return copy(copy_cache, head);
 }
+
