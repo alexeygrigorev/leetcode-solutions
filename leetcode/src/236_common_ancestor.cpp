@@ -72,6 +72,15 @@ TreeNode *CommonAncestorSolution::common_ancestor_memo(TreeNode *root, TreeNode 
 }
 
 TreeNode *CommonAncestorSolution::common_ancestor_recursive(TreeNode *root, TreeNode *p, TreeNode *q) {
+    // idea:
+    // we need to find the split - when paths to p and q diverge
+    //
+    // if both left and right return non-null
+    // then p (or q) is on the left and q (or p) is on the right - so branches diverge
+    //
+    // if one is null, and another is not-null
+    // then we look follow non-null to look for the split
+
     if (root == nullptr) {
         return nullptr;
     }
@@ -97,7 +106,6 @@ TreeNode *CommonAncestorSolution::common_ancestor_recursive(TreeNode *root, Tree
 
     return nullptr;
 }
-
 
 TreeNode *CommonAncestorSolution::lowestCommonAncestor(TreeNode *root, TreeNode *p, TreeNode *q) {
     return common_ancestor_recursive(root, p, q);
