@@ -71,8 +71,34 @@ TreeNode *CommonAncestorSolution::common_ancestor_memo(TreeNode *root, TreeNode 
     return common_memo(root, memo_p, memo_q);
 }
 
-TreeNode *CommonAncestorSolution::lowestCommonAncestor(TreeNode *root, TreeNode *p, TreeNode *q) {
-    return common_ancestor_memo(root, p, q);
+TreeNode *CommonAncestorSolution::common_ancestor_recursive(TreeNode *root, TreeNode *p, TreeNode *q) {
+    if (root == nullptr) {
+        return nullptr;
+    }
+
+    if (root == p || root == q) {
+        return root;
+    }
+
+    TreeNode *left = common_ancestor_recursive(root->left, p, q);
+    TreeNode *right = common_ancestor_recursive(root->right, p, q);
+
+    if (left != nullptr && right != nullptr) {
+        return root;
+    }
+
+    if (left != nullptr) {
+        return left;
+    }
+
+    if (right != nullptr) {
+        return right;
+    }
+
+    return nullptr;
 }
 
 
+TreeNode *CommonAncestorSolution::lowestCommonAncestor(TreeNode *root, TreeNode *p, TreeNode *q) {
+    return common_ancestor_recursive(root, p, q);
+}

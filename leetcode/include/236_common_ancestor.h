@@ -13,5 +13,7 @@ class CommonAncestorSolution {
 
     TreeNode *common_ancestor_memo(TreeNode *root, TreeNode *p, TreeNode *q);
 
+    TreeNode *common_ancestor_recursive(TreeNode *root, TreeNode *p, TreeNode *q);
+
     TreeNode *lowestCommonAncestor(TreeNode *root, TreeNode *p, TreeNode *q);
 };
