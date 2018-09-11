@@ -1,4 +1,5 @@
 #include "652_duplicate_subtrees.h"
+#include <sstream>
 
 pair<int, long> DuplicateSubtreesSolution::compute_hashes(TreeNode *node, unordered_map<TreeNode *, long> &hashes) {
     if (node == nullptr) {
@@ -103,6 +104,41 @@ vector<TreeNode*> DuplicateSubtreesSolution::duplicate_subtrees_hash(TreeNode *r
     unordered_map<TreeNode*, long> hashes;
     compute_hashes(root, hashes);
     return find_duplicates(hashes);
+}
+
+string DuplicateSubtreesSolution::serialize(TreeNode *node, unordered_map<string, vector<TreeNode*>> &serializations) {
+    if (node == nullptr) {
+        return "x";
+    }
+
+    stringstream repr;
+
+    repr << node->val << "(";
+    repr << serialize(node->left, serializations);
+    repr << ",";
+    repr << serialize(node->right, serializations);
+    repr << ")";
+
+    string result = repr.str();
+    serializations[result].push_back(node);
+
+    return result;
+}
+
+vector<TreeNode*> DuplicateSubtreesSolution::duplicate_subtrees_serialization(TreeNode *root) {
+    unordered_map<string, vector<TreeNode*>> serializations;
+    serialize(root, serializations);
+
+    vector<TreeNode*> result;
+    for (auto pair : serializations) {
+        vector<TreeNode*> candidates = pair.second;
+
+        if (candidates.size() > 1) {
+            result.push_back(candidates[0]);
+        }
+    }
+
+    return result;
 }
 
 vector<TreeNode*> DuplicateSubtreesSolution::findDuplicateSubtrees(TreeNode *root) {

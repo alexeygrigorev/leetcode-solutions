@@ -1,6 +1,7 @@
 #include "tree.h"
 #include <vector>
-#include "unordered_map"
+#include <string>
+#include <unordered_map>
 
 using namespace std;
 
@@ -15,6 +16,9 @@ public:
     vector<TreeNode*> find_duplicates(unordered_map<TreeNode*, long> &hashes);
 
     vector<TreeNode*> duplicate_subtrees_hash(TreeNode* root);
+
+    string serialize(TreeNode *node, unordered_map<string, vector<TreeNode*>> &serializations);
+    vector<TreeNode*> duplicate_subtrees_serialization(TreeNode* root);
 
     vector<TreeNode*> findDuplicateSubtrees(TreeNode* root);
 };
