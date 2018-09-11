@@ -10,5 +10,7 @@ public:
     string serialize(TreeNode *root);
 
     TreeNode *parse_recursive(string &data, int *pos);
+    TreeNode *parse_iteratively(string &data);
+
     TreeNode *deserialize(string data);
 };

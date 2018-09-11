@@ -1,4 +1,5 @@
 #include "297_binary_tree_codec.h"
+#include <vector>
 
 void BinaryTreeCodec::traverse_serialize(TreeNode *node, stringstream &ss) {
     if (node == nullptr) {
@@ -59,4 +60,59 @@ TreeNode *BinaryTreeCodec::parse_recursive(string &data, int *pos) {
 TreeNode *BinaryTreeCodec::deserialize(string data) {
     int pos = 0;
     return parse_recursive(data, &pos);
+}
+
+TreeNode *BinaryTreeCodec::parse_iteratively(string &data) {
+    int pos = 0;
+    vector<TreeNode *> stack;
+
+    while (pos < data.length()) {
+        if (data[pos] == 'x') {
+            stack.push_back(nullptr);
+            pos++;
+            continue;
+        }
+
+        if (data[pos] == ')') {
+            pos++;
+
+            TreeNode* right = stack.back();
+            stack.pop_back();
+            TreeNode* left = stack.back();
+            stack.pop_back();
+            TreeNode* node = stack.back();
+            stack.pop_back();
+
+            node->left = left;
+            node->right = right;
+            stack.push_back(node);
+            continue;
+        }
+
+        if (data[pos] == '(' || data[pos] == ',') {
+            pos++;
+            continue;
+        }
+
+        bool minus = false;
+        if (data[pos] == '-') {
+            minus = true;
+            pos++;
+        }
+
+        int val = 0;
+        while (data[pos] >= '0' && data[pos] <= '9') {
+            val = val * 10 + (data[pos] - '0');
+            pos++;
+        }
+
+        if (minus) {
+            val = -val;
+        }
+
+        TreeNode *node = new TreeNode(val);
+        stack.push_back(node);
+    }
+
+    return stack.back();
 }
