@@ -5,7 +5,15 @@ using namespace std;
 
 class SubstringConcatSolution {
 public:
-    bool match(string &s, int start, vector<string> &words, vector<bool> &used,
-               int words_used);
     vector<int> findSubstring(string s, vector<string> &words);
+
+    vector<vector<int>> calculate_matches(const string &s, const vector<string> &words) const;
+
+    vector<int> find_matches(vector<vector<int>> &matches, vector<int> &lens,
+                             vector<int> &counts);
+
+    bool match(int start, vector<vector<int>> &matches, vector<int> &lens,
+                                    vector<int> &counts, int num_used);
+
+    pair<vector<string>, vector<int>> unique(vector<string> &words);
 };
