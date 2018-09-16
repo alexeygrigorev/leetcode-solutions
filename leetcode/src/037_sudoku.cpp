@@ -58,26 +58,24 @@ SudokuSolution::find_candidates(vector<vector<char>> &board,
     }
 }
 
-vector<Candidates*> SudokuSolution::min_candidate(vector<vector<Candidates *>> &idx) {
+Candidates* SudokuSolution::min_candidate(vector<Candidates*> &idx) {
+    int min = 9;
+    Candidates* result = nullptr;
 
-    vector<Candidates*> result;
-
-    for (int i = 0; i < 9; i++) {
-        for (int j = 0; j < 9; j++) {
-            Candidates *c = idx[i][j];
-            if (c != nullptr && !c->visited) {
-                result.push_back(c);
+    for (Candidates *c : idx) {
+        if (c != nullptr && !c->visited) {
+            if (c->num_candidates < min) {
+                min = c->num_candidates;
+                result = c;
             }
         }
     }
-
-    sort(result.begin(), result.end(), CandidatesCompare());
 
     return result;
 }
 
 vector<Candidates*>
-SudokuSolution::remove_candidates(vector<vector<Candidates *>> &idx, Candidates *meta, int candidate) {
+SudokuSolution::remove_candidates(Candidates *meta, int candidate) {
     vector<Candidates*> coords;
 
     for (Candidates *other : meta->others) {
@@ -99,64 +97,45 @@ SudokuSolution::return_candidates(vector<Candidates*> &coords, int candidate) {
     }
 }
 
-bool SudokuSolution::solve(vector<vector<char>> &board, vector<vector<Candidates *>> &idx, int l) {
-//    printf("solve step %d\n", l);
-    vector<Candidates *> cand_sorted = min_candidate(idx);
-    if (cand_sorted.empty()) {
-//        printf("no more candidates\n");
+bool SudokuSolution::solve(vector<vector<char>> &board, vector<Candidates*> &idx, int l) {
+    Candidates* c = min_candidate(idx);
+    if (c == nullptr) {
         return true;
     }
 
-    Candidates *c = cand_sorted[0];
-//    for (Candidates *c : cand_sorted) {
-//        printf("candidates size at %d,%d is %d\n", c->row, c->col, c->num_candidates);
-
-        for (int i = 0; i < 9; i++) {
-            if (c->candidates[i] == false) {
-                continue;
-            }
-
-//            printf(" - trying to set %d,%d to %d\n", c->row, c->col, i + 1);
-
-            if (cannot_remove_candidate(c, i)) {
-//                printf(" -- cannot remove it\n");
-                continue;
-            }
-
-            c->candidates[i] = false;
-            c->num_candidates--;
-            c->visited = true;
-
-            vector<Candidates*> coords = remove_candidates(idx, c, i);
-
-            board[c->row][c->col] = i + '1';
-            if (solve(board, idx, l + 1)) {
-//                printf(" - found solution!\n");
-                return true;
-            }
-
-//            printf(" - no solution when %d,%d = %d at step %d, backtrack\n", c->row, c->col, i + 1, l);
-
-            board[c->row][c->col] = '.';
-            return_candidates(coords, i);
-
-            c->candidates[i] = true;
-            c->num_candidates++;
-            c->visited = false;
+    for (int i = 0; i < 9; i++) {
+        if (c->candidates[i] == false) {
+            continue;
         }
-//    }
+
+        if (cannot_remove_candidate(c, i)) {
+            continue;
+        }
+
+        c->candidates[i] = false;
+        c->num_candidates--;
+        c->visited = true;
+
+        vector<Candidates*> coords = remove_candidates(c, i);
+
+        board[c->row][c->col] = i + '1';
+        if (solve(board, idx, l + 1)) {
+            return true;
+        }
+
+        board[c->row][c->col] = '.';
+        return_candidates(coords, i);
+
+        c->candidates[i] = true;
+        c->num_candidates++;
+        c->visited = false;
+    }
 
     return false;
 }
 
-void SudokuSolution::solveSudoku(vector<vector<char>> &board) {
-    vector<vector<Candidates *>> idx = build_index(board);
-
-    solve(board, idx, 0);
-}
-
-vector<vector<Candidates *>> SudokuSolution::build_index(vector<vector<char>> &board) {
-    vector<vector<Candidates *>> idx(9, vector<Candidates*>(9, nullptr));
+vector<Candidates*> SudokuSolution::build_index(vector<vector<char>> &board) {
+    vector<vector<Candidates*>> idx(9, vector<Candidates*>(9, nullptr));
     for (int row = 0; row < 9; row++) {
         for (int col = 0; col < 9; col++) {
             if (board[row][col] != '.') {
@@ -175,6 +154,8 @@ vector<vector<Candidates *>> SudokuSolution::build_index(vector<vector<char>> &b
         }
     }
 
+    vector<Candidates*> result;
+
     for (int row = 0; row < 9; row++) {
         for (int col = 0; col < 9; col++) {
             if (board[row][col] != '.') {
@@ -182,10 +163,11 @@ vector<vector<Candidates *>> SudokuSolution::build_index(vector<vector<char>> &b
             }
 
             find_candidates(board, idx, idx[row][col]);
+            result.push_back(idx[row][col]);
         }
     }
 
-    return idx;
+    return result;
 }
 
 bool SudokuSolution::cannot_remove_candidate(Candidates *c, int candidate) {
@@ -200,4 +182,9 @@ bool SudokuSolution::cannot_remove_candidate(Candidates *c, int candidate) {
     }
 
     return false;
+}
+
+void SudokuSolution::solveSudoku(vector<vector<char>> &board) {
+    vector<Candidates*> idx = build_index(board);
+    solve(board, idx, 0);
 }

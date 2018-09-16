@@ -23,13 +23,14 @@ public:
     void find_candidates(vector<vector<char>> &board,
                          vector<vector<Candidates *>> &idx,
                          Candidates *C);
-    vector<Candidates*> min_candidate(vector<vector<Candidates*>> &idx);
-    vector<Candidates*> remove_candidates(vector<vector<Candidates*>> &idx, Candidates* meta, int candidate);
+    Candidates* min_candidate(vector<Candidates*> &idx);
+    vector<Candidates*> remove_candidates(Candidates* meta, int candidate);
     void return_candidates(vector<Candidates*> &coords, int candidate);
-    bool solve(vector<vector<char>> &board, vector<vector<Candidates*>> &idx, int l);
-    void solveSudoku(vector<vector<char>> &board);
+    bool solve(vector<vector<char>> &board, vector<Candidates*> &idx, int l);
 
-    vector<vector<Candidates *>> build_index(vector<vector<char>> &board);
+    vector<Candidates*> build_index(vector<vector<char>> &board);
 
     bool cannot_remove_candidate(Candidates *c, int candidate);
+
+    void solveSudoku(vector<vector<char>> &board);
 };
