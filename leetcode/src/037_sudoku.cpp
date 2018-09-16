@@ -1,6 +1,5 @@
 #include "037_sudoku.h"
 #include <algorithm>
-#include <zconf.h>
 
 void
 SudokuSolution::find_candidates(vector<vector<char>> &board,
@@ -59,19 +58,16 @@ SudokuSolution::find_candidates(vector<vector<char>> &board,
     }
 }
 
-vector<Candidates *> SudokuSolution::min_candidate(vector<vector<Candidates *>> &idx) {
+vector<Candidates*> SudokuSolution::min_candidate(vector<vector<Candidates *>> &idx) {
 
-    vector<Candidates *> result;
+    vector<Candidates*> result;
 
-    for (const vector<Candidates *> &row : idx) {
-        for (Candidates *c : row) {
-            if (c == nullptr) {
-                continue;
+    for (int i = 0; i < 9; i++) {
+        for (int j = 0; j < 9; j++) {
+            Candidates *c = idx[i][j];
+            if (c != nullptr && !c->visited) {
+                result.push_back(c);
             }
-            if (c->visited == true) {
-                continue;
-            }
-            result.push_back(c);
         }
     }
 
@@ -104,25 +100,26 @@ SudokuSolution::return_candidates(vector<Candidates*> &coords, int candidate) {
 }
 
 bool SudokuSolution::solve(vector<vector<char>> &board, vector<vector<Candidates *>> &idx, int l) {
-    printf("solve step %d\n", l);
+//    printf("solve step %d\n", l);
     vector<Candidates *> cand_sorted = min_candidate(idx);
     if (cand_sorted.empty()) {
-        printf("no more candidates\n");
+//        printf("no more candidates\n");
         return true;
     }
 
-    for (Candidates *c : cand_sorted) {
-        printf("candidates size at %d,%d is %d\n", c->row, c->col, c->num_candidates);
+    Candidates *c = cand_sorted[0];
+//    for (Candidates *c : cand_sorted) {
+//        printf("candidates size at %d,%d is %d\n", c->row, c->col, c->num_candidates);
 
         for (int i = 0; i < 9; i++) {
             if (c->candidates[i] == false) {
                 continue;
             }
 
-            printf(" - trying to set %d,%d to %d\n", c->row, c->col, i + 1);
+//            printf(" - trying to set %d,%d to %d\n", c->row, c->col, i + 1);
 
             if (cannot_remove_candidate(c, i)) {
-                printf(" -- cannot remove it\n");
+//                printf(" -- cannot remove it\n");
                 continue;
             }
 
@@ -138,7 +135,7 @@ bool SudokuSolution::solve(vector<vector<char>> &board, vector<vector<Candidates
                 return true;
             }
 
-            printf(" - no solution when %d,%d = %d at step %d, backtrack\n", c->row, c->col, i + 1, l);
+//            printf(" - no solution when %d,%d = %d at step %d, backtrack\n", c->row, c->col, i + 1, l);
 
             board[c->row][c->col] = '.';
             return_candidates(coords, i);
@@ -147,7 +144,7 @@ bool SudokuSolution::solve(vector<vector<char>> &board, vector<vector<Candidates
             c->num_candidates++;
             c->visited = false;
         }
-    }
+//    }
 
     return false;
 }
