@@ -1,4 +1,5 @@
 #include <climits>
+#include <unordered_set>
 #include "076_min_window_substring.h"
 
 string MinWindowSubstringSolution::min_window_naive(string s, string t) {
@@ -9,7 +10,6 @@ string MinWindowSubstringSolution::min_window_naive(string s, string t) {
     int num_chars = t.size();
     vector<int> cnt(256, 0);
 
-    int matches = 0;
     for (char c : t) {
         cnt[c]++;
     }
@@ -36,7 +36,6 @@ string MinWindowSubstringSolution::min_window_naive(string s, string t) {
     int best_start = -1;
 
     for (int i = 0; i < num_matches - num_chars + 1; i++) {
-        // printf("trying i = %d\n", i);
         int total_cnt = num_chars;
         vector<int> cnt_copy = cnt;
         int start = candidate_pos[i];
@@ -45,12 +44,10 @@ string MinWindowSubstringSolution::min_window_naive(string s, string t) {
             int end = candidate_pos[j];
             int len = end - start + 1;
             if (len > min_len) {
-                // printf("no point trying, exiting\n");
                 break;
             }
 
             char c = candidate_str[j];
-            // printf("char s[%d]=%c, total_cnt = %d\n", i, c, total_cnt);
 
             if (cnt_copy[c] == 0) {
                 continue;
@@ -64,12 +61,130 @@ string MinWindowSubstringSolution::min_window_naive(string s, string t) {
                 if (len < min_len) {
                     min_len = len;
                     best_start = i;
-                    // printf("new best len %d\n", min_len);
                 }
                 break;
             }
         }
-        // printf("done i = %d ;\n", i);
+    }
+
+    if (best_start == -1) {
+        return "";
+    }
+
+    return s.substr(candidate_pos[best_start], min_len);
+}
+
+class CharMultiset {
+private:
+    vector<int> cnt;
+    unordered_set<int> nonzero_elements;
+
+public:
+    CharMultiset() : cnt(vector<int>(256, 0)), nonzero_elements(unordered_set<int>()) {}
+
+    void add(char c) {
+        if (cnt[c] == 0) {
+            nonzero_elements.insert(c);
+        }
+        cnt[c]++;
+    }
+
+    void remove(char c) {
+        if (cnt[c] == 0) {
+            return;
+        }
+
+        cnt[c]--;
+        if (cnt[c] == 0) {
+            nonzero_elements.erase(c);
+        }
+    }
+
+    bool contains(char c) {
+        return cnt[c] > 0;
+    }
+
+    bool covers(const CharMultiset &other) {
+        for (char c : other.nonzero_elements) {
+            if (cnt[c] < other.cnt[c]) {
+                return false;
+            }
+        }
+        return true;
+    }
+};
+
+string MinWindowSubstringSolution::min_window_two_indexes(string s, string t) {
+    if (s.length() == 0 || t.length() == 0) {
+        return "";
+    }
+
+    int num_chars = t.size();
+    CharMultiset cnt;
+
+    for (char c : t) {
+        cnt.add(c);
+    }
+
+    vector<int> candidate_pos;
+    vector<char> candidate_str;
+
+    for (int i = 0; i < s.size(); i++) {
+        if (cnt.contains(s[i])) {
+            candidate_pos.push_back(i);
+            candidate_str.push_back(s[i]);
+        }
+    }
+
+    int num_matches = candidate_str.size();
+
+    if (num_matches < num_chars) {
+        return "";
+    }
+
+    int min_len = INT_MAX;
+    int best_start = -1;
+
+    int left = 0;
+    int right = 0;
+
+    CharMultiset window;
+
+    while (right < num_matches) {
+        // go as far as possible
+        while (right < num_matches) {
+            char c = candidate_str[right];
+            window.add(c);
+            if (window.covers(cnt)) {
+                break;
+            }
+            right++;
+        }
+
+        // reached end, but not covering
+        if (!window.covers(cnt)) {
+            break;
+        }
+
+        // find min
+        while (left < right) {
+            char c = candidate_str[left];
+            window.remove(c);
+            if (!window.covers(cnt)) {
+                break;
+            }
+            left++;
+        }
+
+        int len = candidate_pos[right] - candidate_pos[left] + 1;
+        if (len < min_len) {
+            min_len = len;
+            best_start = left;
+        }
+
+        // now remove one letter and find the next match
+        left++;
+        right++;
     }
 
     if (best_start == -1) {
@@ -80,5 +195,5 @@ string MinWindowSubstringSolution::min_window_naive(string s, string t) {
 }
 
 string MinWindowSubstringSolution::minWindow(string s, string t) {
-    return min_window_naive(s, t);
+    return min_window_two_indexes(s, t);
 }
