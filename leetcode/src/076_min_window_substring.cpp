@@ -194,6 +194,53 @@ string MinWindowSubstringSolution::min_window_two_indexes(string s, string t) {
     return s.substr(candidate_pos[best_start], min_len);
 }
 
+string MinWindowSubstringSolution::min_window_optimized(string s, string t) {
+    if (s.empty() || t.empty() || s.length() < t.length()) {
+        return "";
+    }
+
+    vector<int> counts(128, 0);
+    for (char c : t) {
+        counts[c]++;
+    }
+
+    int total_count = t.length();
+    int left = 0;
+    int best_len = INT_MAX;
+    int best_left = -1;
+
+    for (int right = 0; right < s.length(); right++) {
+        char cr = s[right];
+
+        if (counts[cr] > 0) {
+            total_count--;
+        }
+        counts[cr]--;
+
+        while (total_count == 0) {
+            char cl = s[left];
+            int len = right - left + 1;
+            if (len < best_len) {
+                best_len = len;
+                best_left = left;
+            }
+
+            counts[cl]++;
+            if (counts[cl] > 0) {
+                total_count++;
+            }
+
+            left++;
+        }
+    }
+
+    if (best_left == -1) {
+        return "";
+    }
+
+    return s.substr(best_left, best_len);
+}
+
 string MinWindowSubstringSolution::minWindow(string s, string t) {
-    return min_window_two_indexes(s, t);
+    return min_window_optimized(s, t);
 }
