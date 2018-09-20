@@ -1,3 +1,4 @@
+#include <cstdlib>
 #include "084_max_hist_rectangle.h"
 
 int MaxHistRectangleSolution::largest_area_naive(vector<int> &heights) {
@@ -33,8 +34,92 @@ int MaxHistRectangleSolution::largest_area_naive(vector<int> &heights) {
     return max_area;
 }
 
-int MaxHistRectangleSolution::largestRectangleArea(vector<int> &heights) {
-    return largest_area_naive(heights);
+MinIndexPair &MinSegmentTree::combine(MinIndexPair &left, MinIndexPair &right) {
+    if (left.min_value < right.min_value) {
+        return left;
+    } else {
+        return right;
+    }
 }
 
+void MinSegmentTree::build(vector<int> &heights, int idx, int from, int to) {
+    if (from == to) {
+        values[idx].index = from;
+        values[idx].min_value = heights[from];
+        return;
+    }
 
+    int middle = (from + to) / 2;
+    int left_idx = 2 * idx + 1;
+    int right_idx = 2 * idx + 2;
+
+    build(heights, left_idx, from, middle);
+    build(heights, right_idx, middle + 1, to);
+
+    values[idx] = combine(values[left_idx], values[right_idx]);
+}
+
+MinIndexPair &MinSegmentTree::min(int idx, int query_from, int query_to, int segment_from, int segment_to) {
+    if (query_from == segment_from && query_to == segment_to) {
+        return values[idx];
+    }
+
+    int middle = (segment_from + segment_to) / 2;
+    int left_idx = 2 * idx + 1;
+    int right_idx = 2 * idx + 2;
+
+    if (query_from <= middle && query_to <= middle) {
+        return min(left_idx, query_from, query_to, segment_from, middle);
+    }
+
+    if (query_from > middle && query_to > middle) {
+        return min(right_idx, query_from, query_to, middle + 1, segment_to);
+    }
+
+    MinIndexPair &left = min(left_idx, query_from, middle, segment_from, middle);
+    MinIndexPair &right = min(right_idx, middle + 1, query_to, middle + 1, segment_to);
+
+    return combine(left, right);
+};
+
+MinSegmentTree::MinSegmentTree(vector<int> &heights) {
+    this->size = heights.size();
+    this->values = (MinIndexPair *) malloc(sizeof(MinIndexPair) * 4 * size);
+    build(heights, 0, 0, size - 1);
+}
+
+int MinSegmentTree::find_min_index(int from, int to) {
+    MinIndexPair &result = min(0, from, to, 0, size - 1);
+    return result.index;
+}
+
+int MaxHistRectangleSolution::largest_area_recursive(vector<int> &heights, MinSegmentTree &st, int left, int right) {
+    if (left > right) {
+        return -1;
+    }
+    if (left == right) {
+        return heights[left];
+    }
+
+    int min_idx = st.find_min_index(left, right);
+    int h = heights[min_idx];
+    int area = (right - left + 1) * h;
+
+    int left_area = largest_area_recursive(heights, st, left, min_idx - 1);
+    int right_area = largest_area_recursive(heights, st, min_idx + 1, right);
+
+    return max(area, max(left_area, right_area));
+}
+
+int MaxHistRectangleSolution::largest_area_segment_tree(vector<int> &heights) {
+    if (heights.empty()) {
+        return 0;
+    }
+
+    MinSegmentTree st(heights);
+    return largest_area_recursive(heights, st, 0, heights.size() - 1);
+}
+
+int MaxHistRectangleSolution::largestRectangleArea(vector<int> &heights) {
+    return largest_area_segment_tree(heights);
+}

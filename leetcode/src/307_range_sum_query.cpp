@@ -21,4 +21,3 @@ int RangeSumArray::sumRange(int i, int j) {
     }
     return st->sum(i, j);
 }
-
