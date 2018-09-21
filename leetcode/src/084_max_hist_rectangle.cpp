@@ -1,4 +1,5 @@
 #include <cstdlib>
+#include <climits>
 #include "084_max_hist_rectangle.h"
 
 int MaxHistRectangleSolution::largest_area_naive(vector<int> &heights) {
@@ -28,6 +29,38 @@ int MaxHistRectangleSolution::largest_area_naive(vector<int> &heights) {
 
         if (area > max_area) {
             max_area = area;
+        }
+    }
+
+    return max_area;
+}
+
+int MaxHistRectangleSolution::largest_area_naive2(vector<int> &heights) {
+    int max_area = 0;
+
+    for (int i = 0; i < heights.size(); i++) {
+        if (heights[i] == 0) {
+            continue;
+        }
+
+        int min_height = INT_MAX;
+
+        for (int j = i; j >= 0; j--) {
+            int h = heights[j];
+            if (h == 0) {
+                break;
+            }
+
+            if (h < min_height) {
+                min_height = h;
+            }
+
+            int len = i - j + 1;
+
+            int area = min_height * len;
+            if (area > max_area) {
+                max_area = area;
+            }
         }
     }
 
@@ -120,6 +153,11 @@ int MaxHistRectangleSolution::largest_area_segment_tree(vector<int> &heights) {
     return largest_area_recursive(heights, st, 0, heights.size() - 1);
 }
 
+int MaxHistRectangleSolution::largest_area_stack(vector<int> &heights) {
+    return 0;
+}
+
 int MaxHistRectangleSolution::largestRectangleArea(vector<int> &heights) {
-    return largest_area_segment_tree(heights);
+    return largest_area_naive2(heights);
+    //return largest_area_segment_tree(heights);
 }

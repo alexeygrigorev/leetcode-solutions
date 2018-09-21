@@ -23,6 +23,8 @@ public:
 class MaxHistRectangleSolution {
 public:
     int largest_area_naive(vector<int> &heights);
+    int largest_area_naive2(vector<int> &heights);
+    int largest_area_stack(vector<int> &heights);
     int largest_area_recursive(vector<int> &heights, MinSegmentTree &st, int left, int right);
     int largest_area_segment_tree(vector<int> &heights);
     int largestRectangleArea(vector<int> &heights);
