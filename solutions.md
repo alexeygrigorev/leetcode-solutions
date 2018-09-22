@@ -245,6 +245,68 @@ Solution:
 * the rest is the same 
 
 
+## 84. Largest Rectangle in Histogram
+
+* [description](https://leetcode.com/problems/largest-rectangle-in-histogram/)
+* [solution](https://github.com/alexeygrigorev/leetcode-solutions/blob/master/leetcode/src/084_max_hist_rectangle.cpp)
+
+
+* Let `hist` be the array with heights
+* and let `n` be the length of `hist`
+
+Naive:
+
+* `max_area = 0`
+* for each index `i = 0 .. n - 1`
+* let `min_height = inf`
+    * for `j = i .. 0`
+    * update `min_height = min(min_height, hist[j])`
+    * calculate width of the area as `width = j - i + 1`
+    * `area = min_height * width`
+    * update `max_area = max(max_area, area)`
+* return `max_area`
+
+
+Solution with stack:
+
+Idea: 
+
+* uses the same idea as the naive approach: 
+* look for all gradually decreasing values that are before current index `i`
+* calculate area for each `width` 
+* use stack to efficiently find decreasing values 
+
+Solution:
+
+* create empty stack `s` 
+* let `i = 0` and while `i < n`, do
+* if `s` is empty or `hist[i]` is larger or equal to `s.top`:
+    * put `i` to `s`
+    * increment `i`
+* otherwise:
+    * pop `j` from `s` 
+    * height is `h = hist[j]`
+        * this is the largest value currently in `s` 
+        * (and it's also higher than the current value at `hist[i]`)
+    * calculate width of area as `w = i - 1 - s.top` or `w = i` if `s` is empty
+        * we calculate the area formed by the previous bar, hence use `i-1`
+        * `s.top` contains the previous min element
+    * let `area = h * w`
+    * update `max_area = max(max_area, area)`
+* if stack is not empty, repeat the above procedure one more time
+* return `max_area`
+
+
+Divide-and-Conquer
+
+* another approach is to use recursion
+* find the index `m` of the min value between indexes `left` and `right`
+* then max area is the maximum of
+    * height of this min bar
+    * maximal area of the histogram on the left of `m`
+    * maximal area of the histogram on the right of `m`
+* to find the min value efficiently, use segment tree
+
 
 ## 152. Maximum Subarray Product
 

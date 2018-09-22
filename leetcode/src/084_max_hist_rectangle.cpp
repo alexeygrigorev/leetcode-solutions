@@ -153,11 +153,55 @@ int MaxHistRectangleSolution::largest_area_segment_tree(vector<int> &heights) {
     return largest_area_recursive(heights, st, 0, heights.size() - 1);
 }
 
-int MaxHistRectangleSolution::largest_area_stack(vector<int> &heights) {
-    return 0;
+int MaxHistRectangleSolution::largest_area_stack(vector<int> &hist) {
+    vector<int> stack;
+
+    int i = 0;
+    int n = hist.size();
+
+    int max_area = 0;
+
+    while (i < n) {
+        if (stack.empty() || hist[i] >= hist[stack.back()]) {
+            stack.push_back(i);
+            i++;
+            continue;
+        }
+
+        int min_idx = stack.back();
+        stack.pop_back();
+
+        int height = hist[min_idx];
+
+        int width = i;
+        if (!stack.empty()) {
+            int prev_min_idx = stack.back();
+            width = i - 1 - prev_min_idx;
+        }
+
+        int area = height * width;
+        max_area = max(max_area, area);
+    }
+
+    while (!stack.empty()) {
+        int min_idx = stack.back();
+        stack.pop_back();
+
+        int height = hist[min_idx];
+
+        int width = i;
+        if (!stack.empty()) {
+            int prev_min_idx = stack.back();
+            width = i - 1 - prev_min_idx;
+        }
+
+        int area = height * width;
+        max_area = max(max_area, area);
+    }
+
+    return max_area;
 }
 
 int MaxHistRectangleSolution::largestRectangleArea(vector<int> &heights) {
-    return largest_area_naive2(heights);
-    //return largest_area_segment_tree(heights);
+    return largest_area_stack(heights);
 }
