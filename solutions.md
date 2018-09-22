@@ -269,22 +269,22 @@ Naive:
 
 Solution with stack:
 
-Idea: 
+Idea:
 
-* uses the same idea as the naive approach: 
+* uses the same idea as the naive approach:
 * look for all gradually decreasing values that are before current index `i`
-* calculate area for each `width` 
-* use stack to efficiently find decreasing values 
+* calculate area for each `width`
+* use stack to efficiently find decreasing values
 
 Solution:
 
-* create empty stack `s` 
+* create empty stack `s`
 * let `i = 0` and while `i < n`, do
-* if `s` is empty or `hist[i]` is larger or equal to `s.top`:
+* if `s` is empty or `hist[i]` is larger or equal to `hist[s.top]`:
     * put `i` to `s`
     * increment `i`
 * otherwise:
-    * pop `j` from `s` 
+    * pop `j` from `s`
     * height is `h = hist[j]`
         * this is the largest value currently in `s` 
         * (and it's also higher than the current value at `hist[i]`)
