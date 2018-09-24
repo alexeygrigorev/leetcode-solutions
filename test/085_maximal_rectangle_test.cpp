@@ -159,6 +159,6 @@ TEST(MaxRectangle, Test3) {
         "1111111111111111011111111111111111111111111111111111111111111111111111011111111101110111110111111111"
     });
     int actual = solution085->maximalRectangle(input);
-    int expected = 21;
+    int expected = 114;
     EXPECT_EQ(actual, expected);
 }
