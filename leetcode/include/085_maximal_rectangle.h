@@ -61,12 +61,17 @@ public:
 
 class MaximalRectangleDfsSolution {
 public:
+    bool can_expand_row(vector<vector<char>> &matrix, int row, int col_start, int col_end);
+    bool can_expand_col(vector<vector<char>> &matrix, int col, int row_start, int row_end);
+
     bool can_expand_left(vector<vector<char>> &matrix, rectangle &rect);
     bool can_expand_right(vector<vector<char>> &matrix, rectangle &rect);
     bool can_expand_up(vector<vector<char>> &matrix, rectangle &rect);
     bool can_expand_down(vector<vector<char>> &matrix, rectangle &rect);
+
     void grow_recursive(vector<vector<char>> &matrix, rectangle &rect,
                         vector<rectangle> &rectangles,
                         unordered_set<rectangle, rectangle_hash> &visited);
+
     int maximalRectangle(vector<vector<char>> &matrix);
 };

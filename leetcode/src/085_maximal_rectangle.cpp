@@ -1,5 +1,3 @@
-#include <cstdio>
-#include <unordered_set>
 #include "085_maximal_rectangle.h"
 
 bool MaximalRectangleNaiveSolution::can_expand_right(vector<vector<char>> &matrix, coord &start, coord &current) {
@@ -113,6 +111,56 @@ int MaximalRectangleNaiveSolution::maximalRectangle(vector<vector<char>> &matrix
     return max_area;
 }
 
+
+bool MaximalRectangleDfsSolution::can_expand_row(vector<vector<char>> &matrix, int row, int col_start, int col_end) {
+    if (row < 0 || row >= matrix.size()) {
+        return false;
+    }
+
+    for (int col = col_start; col <= col_end; col++) {
+        if (matrix[row][col] != '1') {
+            return false;
+        }
+    }
+
+    return true;
+
+}
+
+bool MaximalRectangleDfsSolution::can_expand_col(vector<vector<char>> &matrix, int col, int row_start, int row_end) {
+    if (col < 0 || col >= matrix[0].size()) {
+        return false;
+    }
+
+    for (int row = row_start; row <= row_end; row++) {
+        if (matrix[row][col] != '1') {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+bool MaximalRectangleDfsSolution::can_expand_right(vector<vector<char>> &matrix,
+                                                   rectangle &rect) {
+    return can_expand_col(matrix, rect.end.col + 1, rect.start.row, rect.end.row);
+}
+
+bool MaximalRectangleDfsSolution::can_expand_up(vector<vector<char>> &matrix,
+                                                rectangle &rect) {
+    return can_expand_row(matrix, rect.start.row - 1, rect.start.col, rect.end.col);
+}
+
+bool MaximalRectangleDfsSolution::can_expand_down(vector<vector<char>> &matrix,
+                                                  rectangle &rect) {
+    return can_expand_row(matrix, rect.end.row + 1, rect.start.col, rect.end.col);
+}
+
+bool MaximalRectangleDfsSolution::can_expand_left(vector<vector<char>> &matrix,
+                                                  rectangle &rect) {
+    return can_expand_col(matrix, rect.start.col - 1, rect.start.row, rect.end.row);
+}
+
 void MaximalRectangleDfsSolution::grow_recursive(vector<vector<char>> &matrix,
          rectangle &rect, vector<rectangle> &rectangles,
          unordered_set<rectangle, rectangle_hash> &visited) {
@@ -121,40 +169,34 @@ void MaximalRectangleDfsSolution::grow_recursive(vector<vector<char>> &matrix,
     coord end = rect.end;
 
     rectangle up_rect(coord(start.row - 1, start.col), end);
-    rectangle down_rect(start, coord(end.row + 1, end.col));
-    rectangle left_rect(coord(start.row, start.col - 1), end);
-    rectangle right_rect(start, coord(end.row, end.col + 1));
-
     bool not_visited_up = visited.count(up_rect) == 0;
     bool up = not_visited_up && can_expand_up(matrix, rect);
-//    printf("can expand (%d,%d)->(%d,%d) up? %d %d\n", start.row, start.col, end.row, end.col, not_visited_up, up);
     if (up) {
         grow_recursive(matrix, up_rect, rectangles, visited);
     }
 
+    rectangle down_rect(start, coord(end.row + 1, end.col));
     bool not_visited_down = visited.count(down_rect) == 0;
     bool down = not_visited_down && can_expand_down(matrix, rect);
-//    printf("can expand (%d,%d)->(%d,%d) down? %d %d\n", start.row, start.col, end.row, end.col, not_visited_down, down);
     if (down) {
         grow_recursive(matrix, down_rect, rectangles, visited);
     }
 
+    rectangle left_rect(coord(start.row, start.col - 1), end);
     bool not_visited_left = visited.count(left_rect) == 0;
     bool left = not_visited_left && can_expand_left(matrix, rect);
-//    printf("can expand (%d,%d)->(%d,%d) left? %d, %d\n", start.row, start.col, end.row, end.col, not_visited_left, left);
     if (left) {
         grow_recursive(matrix, left_rect, rectangles, visited);
     }
 
+    rectangle right_rect(start, coord(end.row, end.col + 1));
     bool not_visited_right = visited.count(right_rect) == 0;
     bool right = not_visited_right && can_expand_right(matrix, rect);
-//    printf("can expand (%d,%d)->(%d,%d) right? %d, %d\n", start.row, start.col, end.row, end.col, not_visited_right, right);
     if (right) {
         grow_recursive(matrix, right_rect, rectangles, visited);
     }
 
     if (!(up || down || left || right)) {
-//        printf("can no longer expand (%d,%d)->(%d,%d)\n", start.row, start.col, end.row, end.col);
         rectangles.push_back(rect);
     }
 
@@ -169,16 +211,15 @@ int MaximalRectangleDfsSolution::maximalRectangle(vector<vector<char>> &matrix) 
     int num_rows = matrix.size();
     int num_cols = matrix[0].size();
 
-    vector<rectangle> all_rectangles;
     vector<vector<bool>> assigned(num_rows, vector<bool>(num_cols, false));
+
+    int max_area = 0;
 
     for (int row = 0; row < num_rows; row++) {
         for (int col = 0; col < num_cols; col++) {
             if (matrix[row][col] != '1' || assigned[row][col]) {
                 continue;
             }
-
-//            printf("run search from %d,%d\n", row, col);
 
             rectangle rect(coord(row, col), coord(row, col));
 
@@ -189,18 +230,10 @@ int MaximalRectangleDfsSolution::maximalRectangle(vector<vector<char>> &matrix) 
             grow_recursive(matrix, rect, rectangles, visited);
 
             for (rectangle &r : rectangles) {
-//                int area = r.calculate_area();
-//                printf("found a rectangle (%d,%d) -> (%d,%d), area %d\n",
-//                       r.start.row, r.start.col,
-//                       r.end.row, r.end.col, area);
+                max_area = max(max_area, r.calculate_area());
 
-                all_rectangles.push_back(r);
-
-                coord start = r.start;
-                coord end = r.end;
-
-                for (int i = start.row; i <= end.row; i++) {
-                    for (int j = start.col; j <= end.col; j++) {
+                for (int i = r.start.row; i <= r.end.row; i++) {
+                    for (int j = r.start.col; j <= r.end.col; j++) {
                         assigned[i][j] = true;
                     }
                 }
@@ -208,98 +241,5 @@ int MaximalRectangleDfsSolution::maximalRectangle(vector<vector<char>> &matrix) 
         }
     }
 
-    if (all_rectangles.empty()) {
-        return 0;
-    }
-
-
-    int max_area = all_rectangles[0].calculate_area();
-
-    for (int i = 1; i < all_rectangles.size(); i++) {
-        int area = all_rectangles[i].calculate_area();
-        max_area = max(area, max_area);
-    }
-
     return max_area;
-}
-
-bool MaximalRectangleDfsSolution::can_expand_right(vector<vector<char>> &matrix,
-                                                   rectangle &rect) {
-    int num_cols = matrix[0].size();
-
-    coord start = rect.start;
-    coord end = rect.end;
-
-    int new_col = end.col + 1;
-    if (new_col >= num_cols) {
-        return false;
-    }
-
-    for (int row = start.row; row <= end.row; row++) {
-        if (matrix[row][new_col] != '1') {
-            return false;
-        }
-    }
-
-    return true;
-}
-
-bool MaximalRectangleDfsSolution::can_expand_up(vector<vector<char>> &matrix,
-                                                rectangle &rect) {
-    coord start = rect.start;
-    coord end = rect.end;
-
-    if (start.row == 0) {
-        return false;
-    }
-
-    int new_row = start.row - 1;
-
-    for (int col = start.col; col <= end.col; col++) {
-        if (matrix[new_row][col] != '1') {
-            return false;
-        }
-    }
-
-    return true;
-}
-
-bool MaximalRectangleDfsSolution::can_expand_down(vector<vector<char>> &matrix,
-                                                  rectangle &rect) {
-    int num_rows = matrix.size();
-    coord start = rect.start;
-    coord end = rect.end;
-
-    int new_row = end.row + 1;
-    if (new_row >= num_rows) {
-        return false;
-    }
-
-    for (int col = start.col; col <= end.col; col++) {
-        if (matrix[new_row][col] != '1') {
-            return false;
-        }
-    }
-
-    return true;
-}
-
-bool MaximalRectangleDfsSolution::can_expand_left(vector<vector<char>> &matrix,
-                                                  rectangle &rect) {
-    coord start = rect.start;
-    coord end = rect.end;
-
-    if (start.col == 0) {
-        return false;
-    }
-
-    int new_col = start.col - 1;
-
-    for (int row = start.row; row <= end.row; row++) {
-        if (matrix[row][new_col] != '1') {
-            return false;
-        }
-    }
-
-    return true;
 }
