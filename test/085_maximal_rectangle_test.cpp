@@ -2,7 +2,8 @@
 #include "gtest/gtest.h"
 
 //MaximalRectangleNaiveSolution *solution085 = new MaximalRectangleNaiveSolution;
-MaximalRectangleDfsSolution *solution085 = new MaximalRectangleDfsSolution;
+//MaximalRectangleDfsSolution *solution085 = new MaximalRectangleDfsSolution;
+MaximalRectangleOptimalSolution *solution085 = new MaximalRectangleOptimalSolution;
 
 vector<vector<char>> to_char_vector(vector<string> in) {
     vector<vector<char>> result;

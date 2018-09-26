@@ -308,6 +308,55 @@ Divide-and-Conquer
 * to find the min value efficiently, use segment tree
 
 
+## 85. Maximal Rectangle
+
+* [description](https://leetcode.com/problems/maximal-rectangle/description/)
+* [solution](https://github.com/alexeygrigorev/leetcode-solutions/blob/master/leetcode/src/085_maximal_rectangle.cpp)
+
+
+DFS solution:
+
+* from each cell that doesn't belong to any rectangle
+* run a DFS to find many rectangles as possible:
+    * start with a simple cell
+    * expand it to left, up, right, down
+    * when no longer possible to expand, add to the left of discovered rectangles
+* then go through all the rectangles and get the one with max area
+
+Largest area in histogram solution:
+
+* use solution from 84. Largest Rectangle in Histogram
+* build a histogram from each row:
+    * from each cell go up while cell contains 1
+* then run solution from 84
+
+DP solution:
+
+* keep 3 helper arrays:
+    * `heights[i][j]`: how many ones are above the cell `m[i,j]`
+    * `left[i][j]`: the index where the current sequence of 1's start
+    * `right[i][j]`: the index where the current sequence of 1's end
+* calculating `heights[i+1][j]` from `heights[i][j]` is easy
+* calculating `left[i+1][j]`:
+    * for each row `i` we maintain index `left_start` where the current sequence of 1s start in this row
+    * if `m[i,j] == 0`, then
+        * let  `left[i+1][j] = 0`
+        * let `left_start = j + 1` - we point it to the next cell, if it's also 0, it'll be incremented anyways
+    * if `m[i,j] == 1`:
+        * let `left[i+1][j] = max(left[i][j], left_start)`
+        * if `left_start` is bigger than `left[i][j]` (index in the cell above), then there's no proper rectangle above, so it's in this row
+        * if `left[i][j]` is bigger, then there's a rectangle
+* calculating `right[i+1][j]`:
+    * similar to `left`, but
+    * we go through values of `j` from the end
+    * we initialize `right_end` with `m`, where `m` is the number of columns in the matrix
+* calculating area for a rectangle at `m[i+1][j]`:
+    * `height = heights[i+1][j]`
+    * `width = right[i+1][j] - left[i+1][j] + 1`
+    * `area = height * width`
+
+
+
 ## 152. Maximum Subarray Product
 
 * a DP problem

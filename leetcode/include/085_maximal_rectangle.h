@@ -75,3 +75,10 @@ public:
 
     int maximalRectangle(vector<vector<char>> &matrix);
 };
+
+class MaximalRectangleOptimalSolution {
+public:
+    int maximal_rectangle_stack(vector<vector<char>> &matrix);
+    int maximal_rectangle_dp(vector<vector<char>> &matrix);
+    int maximalRectangle(vector<vector<char>> &matrix);
+};

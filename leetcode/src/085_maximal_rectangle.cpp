@@ -243,3 +243,70 @@ int MaximalRectangleDfsSolution::maximalRectangle(vector<vector<char>> &matrix) 
 
     return max_area;
 }
+
+int MaximalRectangleOptimalSolution::maximal_rectangle_stack(vector<vector<char>> &matrix) {
+    return 0;
+}
+
+int MaximalRectangleOptimalSolution::maximal_rectangle_dp(vector<vector<char>> &matrix) {
+    if (matrix.empty() || matrix[0].empty()) {
+        return 0;
+    }
+
+    int num_rows = matrix.size();
+    int num_cols = matrix[0].size();
+
+    vector<vector<int>> height(num_rows + 1, vector<int>(num_cols));
+    vector<vector<int>> left(num_rows + 1, vector<int>(num_cols));
+    vector<vector<int>> right(num_rows + 1, vector<int>(num_cols, num_cols));
+
+    int max_area = 0;
+
+    for (int row = 0; row < num_rows; row++) {
+
+        for (int col = 0; col < num_cols; col++) {
+            if (matrix[row][col] == '1') {
+                height[row + 1][col] = height[row][col] + 1;
+            }
+        }
+
+        int left_start = 0;
+        for (int col = 0; col < num_cols; col++) {
+            if (matrix[row][col] == '1') {
+                left[row + 1][col] = max(left[row][col], left_start);
+            } else {
+                left_start = col + 1;
+            }
+        }
+
+        int right_end = num_cols - 1;
+        for (int col = num_cols - 1; col >= 0; col--) {
+            if (matrix[row][col] == '1') {
+                right[row + 1][col] = min(right[row][col], right_end);
+            } else {
+                right_end = col - 1;
+            }
+        }
+
+        for (int col = 0; col < num_cols; col++) {
+            if (matrix[row][col] != '1') {
+                continue;
+            }
+
+            int h = height[row + 1][col];
+            int start = left[row + 1][col];
+            int end = right[row + 1][col];
+            int w = end - start + 1;
+            int area = h * w;
+
+            max_area = max(area, max_area);
+        }
+
+    }
+
+    return max_area;
+}
+
+int MaximalRectangleOptimalSolution::maximalRectangle(vector<vector<char>> &matrix) {
+    return maximal_rectangle_dp(matrix);
+}
