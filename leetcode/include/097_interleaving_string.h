@@ -1,5 +1,6 @@
 #include <vector>
 #include <unordered_map>
+#include <unordered_set>
 
 using namespace std;
 
@@ -7,6 +8,7 @@ struct triple {
     int left;
     int right;
     int full;
+
     triple(int left, int right, int full): left(left), right(right), full(full) {}
 
     bool operator==(const triple &other) const {
@@ -31,6 +33,12 @@ public:
     bool is_interleaving_memo(string left, string right, string full,
                               int left_idx, int right_idx, int full_idx,
                               unordered_map<triple, bool, triple_hash> &memo);
+
+    bool is_interleaving_memo2(string left, string right, string full,
+                              int left_idx, int right_idx, int full_idx,
+                              unordered_set<long> &visited);
+
+    bool is_interleaving_dp(string left, string right, string full);
 
     bool isInterleave(string s1, string s2, string s3);
 };
