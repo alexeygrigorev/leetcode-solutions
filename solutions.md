@@ -356,6 +356,29 @@ DP solution:
     * `area = height * width`
 
 
+## 87. Scramble String
+
+* [description](https://leetcode.com/problems/scramble-string/)
+* [solution](https://github.com/alexeygrigorev/leetcode-solutions/blob/master/leetcode/src/087_scramble_string.cpp)
+
+
+Recursive solution:
+
+* check if `s1` and `s2` are anagrams - if not, `s2` is not scrambled `s1`
+* if `s1 == s2`, then return true
+* now try to split `s1` in all possible ways - this way we go through ways of building the tree
+* let `i` be index between 1 and `len(s1) - 1`
+* `s1[:i]` goes to the left child, `s1[i:]` goes to the right child
+* if we build the tree this way (i.e. by splitting at `i`), then there are two possible ways to split `s2`:
+    * we split `s2[:i]` and `s2[i:]` - if string was not scrambled
+    * or we split `s2[:n-i]` and `s2[n-i:]` - in case the string was scrambled
+* so then we return true if:
+    * `s2[:i]` is scrambled version of `s1[:i]` AND `s2[i:]` is scrambled `s1[i:]`
+    * OR
+    * `s2[n-i:]` is scrambled version of `s1[:i]` AND `s2[:n-i]` is scramble `s1[i:]`
+* otherwise, return false
+
+
 
 ## 152. Maximum Subarray Product
 
