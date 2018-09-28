@@ -73,6 +73,54 @@ int DistinctSubsequencesSolution::num_distinct_naive_index(string s, string t) {
     return count;
 }
 
+int DistinctSubsequencesSolution::count_recursive_naive(string s, string t) {
+    if (t.empty()) {
+        return 1;
+    }
+
+    if (s.size() < t.size()) {
+        return 0;
+    }
+
+    int count = 0;
+
+    for (int i = 0; i < s.size() - t.size() + 1; i++) {
+        if (t[0] == s[i]) {
+            count = count + count_recursive_naive(s.substr(i + 1), t.substr(1));
+        }
+    }
+
+    return count;
+}
+
+
 int DistinctSubsequencesSolution::numDistinct(string s, string t) {
-    return num_distinct_naive_index(s, t);
+    return count_memo(s, t, 0, 0);
+}
+
+int DistinctSubsequencesSolution::count_memo(string &s, string &t, int pos_s, int pos_t) {
+    printf("s = %d, t = %d\n", pos_s, pos_t);
+    int t_size = t.size();
+    int s_size = s.size();
+
+    int t_remaining = t_size - pos_t;
+    int s_remaining = s_size - pos_s;
+
+    if (t_remaining <= 0) {
+        return 1;
+    }
+
+    if (s_remaining < t_remaining) {
+        return 0;
+    }
+
+    int count = 0;
+
+    for (int i = pos_s; i < s.size() - t.size() + 1; i++) {
+        if (t[pos_t] == s[i]) {
+            count = count + count_memo(s, t, i + 1, pos_t + 1);
+        }
+    }
+
+    return count;
 }
