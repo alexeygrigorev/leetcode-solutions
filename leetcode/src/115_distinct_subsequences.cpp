@@ -1,78 +1,5 @@
 #include "115_distinct_subsequences.h"
 
-vector<vector_slice> DistinctSubsequencesSolution::build_index(string &s, string &t) {
-    vector<vector_slice> result;
-
-    for (int i = 0; i < t.size(); i++) {
-        vector<int> data;
-        char tc = t[i];
-
-        for (int j = 0; j < s.size(); j++) {
-            char sc = s[j];
-
-            if (tc == sc) {
-                data.push_back(j);
-            }
-        }
-
-        vector_slice slice(data, 0);
-        result.push_back(slice);
-    }
-
-    return result;
-}
-
-void DistinctSubsequencesSolution::count_subsequences(vector<vector_slice> &index, int pos, int *count) {
-    vector_slice &head = index[pos];
-
-    if (pos == index.size() - 1) {
-        int size = head.data.size() - head.start;
-        *count = *count + size;
-        return;
-    }
-
-    for (int i = head.start; i < head.data.size(); i++) {
-        int idx = head.data[i];
-
-        for (int j = pos + 1; j < index.size(); j++) {
-            vector_slice &slice = index[j];
-            index[j].start = find_start(idx, slice);
-        }
-
-        count_subsequences(index, pos + 1, count);
-    }
-}
-
-int DistinctSubsequencesSolution::find_start(int idx, vector_slice &slice) {
-    vector<int> &data = slice.data;
-    if (data.back() <= idx) {
-        return data.size();
-    }
-
-    int l = 0, r = data.size() - 1;
-
-    while (l <= r) {
-        int m = (l + r) / 2;
-        if (data[m] == idx) {
-            return m + 1;
-        }
-        if (data[m] < idx) {
-            l = m + 1;
-        } else {
-            r = m - 1;
-        }
-    }
-
-    return l;
-}
-
-int DistinctSubsequencesSolution::num_distinct_naive_index(string s, string t) {
-    vector<vector_slice> index = build_index(s, t);
-    int count = 0;
-    count_subsequences(index, 0, &count);
-    return count;
-}
-
 int DistinctSubsequencesSolution::count_recursive_naive(string s, string t) {
     if (t.empty()) {
         return 1;
@@ -93,13 +20,8 @@ int DistinctSubsequencesSolution::count_recursive_naive(string s, string t) {
     return count;
 }
 
-
-int DistinctSubsequencesSolution::numDistinct(string s, string t) {
-    return count_memo(s, t, 0, 0);
-}
-
-int DistinctSubsequencesSolution::count_memo(string &s, string &t, int pos_s, int pos_t) {
-    printf("s = %d, t = %d\n", pos_s, pos_t);
+int DistinctSubsequencesSolution::count_memo(string &s, string &t,
+        int pos_s, int pos_t, vector<vector<int>> &memo) {
     int t_size = t.size();
     int s_size = s.size();
 
@@ -114,13 +36,44 @@ int DistinctSubsequencesSolution::count_memo(string &s, string &t, int pos_s, in
         return 0;
     }
 
+    if (memo[pos_s][pos_t] != -1) {
+        return memo[pos_s][pos_t];
+    }
+
     int count = 0;
 
-    for (int i = pos_s; i < s.size() - t.size() + 1; i++) {
+    for (int i = pos_s; i < s_size - t_remaining + 1; i++) {
         if (t[pos_t] == s[i]) {
-            count = count + count_memo(s, t, i + 1, pos_t + 1);
+            count = count + count_memo(s, t, i + 1, pos_t + 1, memo);
         }
     }
 
+    memo[pos_s][pos_t] = count;
     return count;
+}
+
+int DistinctSubsequencesSolution::num_distinct_memo(string &s, string &t) {
+    vector<vector<int>> memo(s.size(), vector<int>(t.size(), -1));
+    return count_memo(s, t, 0, 0, memo);
+}
+
+int DistinctSubsequencesSolution::num_distinct_dp(string &s, string &t) {
+    vector<vector<int>> dp(t.size() + 1, vector<int>(s.size() + 1, 0));
+    fill(dp[0].begin(), dp[0].end(), 1);
+
+    for (int i = 1; i <= t.size(); i++) {
+        for (int j = 1; j <= s.size(); j++) {
+            if (t[i - 1] == s[j - 1]) {
+                dp[i][j] = dp[i][j - 1] + dp[i - 1][j - 1];
+            } else {
+                dp[i][j] = dp[i][j - 1];
+            }
+        }
+    }
+
+    return dp[t.size()][s.size()];
+}
+
+int DistinctSubsequencesSolution::numDistinct(string s, string t) {
+    return num_distinct_dp(s, t);
 }

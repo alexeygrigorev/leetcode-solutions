@@ -379,6 +379,51 @@ Recursive solution:
 * otherwise, return false
 
 
+## 115. Distinct Subsequences
+
+* [description](https://leetcode.com/problems/distinct-subsequences/)
+* [solution](https://github.com/alexeygrigorev/leetcode-solutions/blob/master/leetcode/src/115_distinct_subsequences.cpp)
+
+Given a string `s` and a string `t`, count the number of distinct subsequences of `s` which equals `t`.
+
+
+Recursive solution:
+
+* let `pos_t` be current position in `t` and `pos_s` be the current position in `s`
+* if `pos_t` is out out bounds - `t` "is empty", so count is 1
+* let `count = 0`
+* now for all indexes `i` in `s` starting from `pos_s`:
+    * if `s[i] == t[pos_t]`
+    * then recursively invoke the function and include results into `count`
+* return `count`
+* easy to add memoization: keep a 2d array `memo`:
+    * `memo[i][j]` contains count for `i=pos_s` and `j=pos_t`
+    * if `memo[i][j] == -1`, not calculated yet
+
+DP:
+
+* keep a table `dp[len(t) + 1][len(s) + 1]`
+* initialize `dp`:
+    * first row is all ones: an empty string is always contained only once
+    * first column is all zeros (except 0,0): empty string cannot contain a non-empty one
+* `dp[i][j]` is
+* if `s[i] != t[j]`, then `dp[i][j-1]`
+    * that's the previous value from the same row
+    * i.e. if the characters don't match, then with `s[i]` the number of times `t[0..i]` occurs in `s[0..j]` is the same as the number of times `t[0..i]` occurs in `s[0..j-1]`
+* otherwise, `dp[i][j-1] + dp[i-1][j-1]`
+    * the number of occurrences of `t[0..i]` in `s[0..j]` is the sum of
+    * number of times `t[0..i-1]` occurred in `s[0..j-1]` and
+    * number of times `t[0..i]` occurred in `s[0..j-1]`
+
+Example:
+
+* `b` occurred 3 times in `babgb`
+* `ba` occurrend 1 time in `babgb`
+* if we consider `babgb`+`a` and `ba`, it's 4:
+    * `ba` has already appeared 1 time
+    * and `b` appeared 3 times, so by adding `a` to `s` all 3 get completed
+
+
 
 ## 152. Maximum Subarray Product
 
