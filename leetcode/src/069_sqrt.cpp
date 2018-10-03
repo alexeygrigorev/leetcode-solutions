@@ -1,4 +1,5 @@
 #include <cmath>
+#include <cstdlib>
 #include "069_sqrt.h"
 
 int SqrtSolution::mySqrt(int x) {
